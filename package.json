@@ -1,0 +1,29 @@
+{
+  "name": "@fraserelliott/fe-components",
+  "description": "Reusable React components",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.js --format esm --clean",
+    "dev": "tsup src/index.js --format esm --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@fraserelliott/fe-utilities": "^0.3.0",
+    "uuid": "^13.0.0"
+  }
+}

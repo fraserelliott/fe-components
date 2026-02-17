@@ -1,0 +1,93 @@
+:root {
+  /* Backgrounds */
+  --fec-bg-primary: #f6f6f3; /* soft off-white / pearl */
+  --fec-bg-secondary: #ecece7; /* subtle contrast surface */
+  --fec-bg-panel: #ffffff; /* clean neutral panel */
+
+  /* Text */
+  --fec-text-primary: #1f1f1f; /* near-black, softer than pure black */
+  --fec-text-secondary: #5a5a5a; /* muted secondary text */
+
+  /* Semantic colours */
+  --fec-confirm: #4caf50; /* calm green, not neon */
+  --fec-danger: #d9534f; /* restrained red */
+
+  /* Borders */
+  --fec-border-subtle: #d6d6d0; /* gentle neutral border */
+
+  /* Shadows */
+  --fec-shadow-soft:
+    0 1px 2px rgba(0, 0, 0, 0.05), 0 3px 6px rgba(0, 0, 0, 0.06);
+
+  /* Optional stronger shadow */
+  --fec-shadow-medium:
+    0 4px 8px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.06);
+}
+
+.fec-bg-primary {
+  background-color: var(--fec-bg-primary);
+}
+
+.fec-bg-secondary {
+  background-color: var(--fec-bg-secondary);
+}
+
+.fec-bg-panel {
+  background-color: var(--fec-bg-panel);
+}
+
+.fec-color-primary {
+  color: var(--fec-text-primary);
+}
+
+.fec-color-secondary {
+  color: var(--fec-text-secondary);
+}
+
+.fec-bg-confirm {
+  background-color: var(--fec-confirm);
+}
+
+.fec-color-confirm {
+  color: var(--fec-confirm);
+}
+
+.fec-bg-danger {
+  background-color: var(--fec-danger);
+}
+
+.fec-color-danger {
+  color: var(--fec-danger);
+}
+
+.fec-border-subtle {
+  border: var(--fec-border-subtle);
+}
+
+.fec-shadow-soft {
+  box-shadow: var(--fec-shadow-soft);
+}
+
+.fec-shadow-medium {
+  box-shadow: var(--fec-shadow-medium);
+}
+
+.fec-opacity-80 {
+  opacity: 0.8;
+}
+
+.fec-opacity-0 {
+  opacity: 0;
+}
+
+.fec-z-top {
+  z-index: 1100;
+}
+
+.fec-opacity-ease-out {
+  transition: opacity 0.15s ease-out;
+}
+
+.fec-w-200 {
+  width: 200px;
+}
