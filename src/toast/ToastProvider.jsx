@@ -1,4 +1,11 @@
-import { createContext, useState, useCallback, useMemo, useRef } from "react";
+import {
+  createContext,
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+  useEffect,
+} from "react";
 import { v4 as uuid } from "uuid";
 
 const ToastContext = createContext();
@@ -13,6 +20,16 @@ export function ToastProvider({
   // Track timers by toast id so we can cancel them later (click-to-dismiss)
   const fadeStartTimersRef = useRef(new Map()); // id -> timeoutId
   const removeTimersRef = useRef(new Map()); // id -> timeoutId
+
+  useEffect(() => {
+    return () => {
+      for (const t of fadeStartTimersRef.current.values())
+        window.clearTimeout(t);
+      for (const t of removeTimersRef.current.values()) window.clearTimeout(t);
+      fadeStartTimersRef.current.clear();
+      removeTimersRef.current.clear();
+    };
+  }, []);
 
   const clearTimersFor = useCallback((id) => {
     const fadeStartTimer = fadeStartTimersRef.current.get(id);
