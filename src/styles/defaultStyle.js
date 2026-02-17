@@ -8,6 +8,7 @@ export const DefaultStyle = {
     ),
   Btn: (...extra) => cx(FEComponents.Btn),
   BtnPrimary: (...extra) => cx(FEComponents.Btn, "fec-bg-primary", ...extra),
-  Btndanger: (...extra) => cx(FEComponents.Btn, "fec-bg-danger", ...extra),
+  BtnDanger: (...extra) => cx(FEComponents.Btn, "fec-bg-danger", ...extra),
+  BtnConfirm: (...extra) => cx(FEComponents.Btn, "fec-bg-confirm", ...extra),
   Heading: (...extra) => cx("fe-fw-bold", ...extra),
 };
