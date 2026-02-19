@@ -1,5 +1,6 @@
 import { useToast } from "./ToastProvider";
 import { ToastDefaultStyle } from "../styles/toastDefaults";
+import { cx } from "@fraserelliott/fe-utilities";
 
 export function ToastMessageDisplay(props) {
   const { toastMessages, dismissToast } = useToast();

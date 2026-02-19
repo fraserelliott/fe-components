@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { UI } from "@styles/styles";
+import { UI } from "@styles";
 
 const pages = [
   { name: "Home", to: "/" },
@@ -10,8 +10,13 @@ const pages = [
 export function Header() {
   const renderPageLink = (page) => {
     return (
-      <li key={page.name} className={UI.NavItem()}>
-        <NavLink to={page.to}>{page.name}</NavLink>
+      <li key={page.name}>
+        <NavLink
+          to={page.to}
+          className={({ isActive }) => UI.NavItem(isActive && "fec-bg-active")}
+        >
+          {page.name}
+        </NavLink>
       </li>
     );
   };

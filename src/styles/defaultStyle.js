@@ -1,14 +1,17 @@
-import { cx, FEComponents } from "@fraserelliott/fe-utilities";
+import { cx, FEPresets } from "@fraserelliott/fe-utilities";
 
 export const DefaultStyle = {
   Panel: (...extra) =>
     cx(
-      "fe-rounded-2 fe-p-rem-1 fec-bg-panel fec-text-primary fec-border-subtle fec-shadow-soft",
+      "fe-rounded-2 fe-p-em-2 fec-bg-panel fec-text-primary fec-border-subtle fec-shadow-soft",
       ...extra,
     ),
-  Btn: (...extra) => cx(FEComponents.Btn),
-  BtnPrimary: (...extra) => cx(FEComponents.Btn, "fec-bg-primary", ...extra),
-  BtnDanger: (...extra) => cx(FEComponents.Btn, "fec-bg-danger", ...extra),
-  BtnConfirm: (...extra) => cx(FEComponents.Btn, "fec-bg-confirm", ...extra),
+  Btn: (...extra) => cx(FEPresets.Btn, "fec-btn fe-pressable", ...extra),
+  BtnPrimary: (...extra) =>
+    cx(FEPresets.Btn, "fec-bg-primary fec-btn fe-pressable", ...extra),
+  BtnDanger: (...extra) =>
+    cx(FEPresets.Btn, "fec-bg-danger fec-btn fe-pressable", ...extra),
+  BtnConfirm: (...extra) =>
+    cx(FEPresets.Btn, "fec-bg-confirm fec-btn fe-pressable", ...extra),
   Heading: (...extra) => cx("fe-fw-bold", ...extra),
 };
