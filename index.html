@@ -4,10 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>fe-components demo</title>
-    <script type="module" crossorigin src="./assets/index-B-xjYL59.js"></script>
+    <script type="module" crossorigin src="./assets/index-D7RijKSw.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CsttfH9v.css">
   </head>
   <body>
+    <script>
+      (function () {
+        const params = new URLSearchParams(location.search);
+        const p = params.get("p");
+        if (p) {
+          const q = params.get("q");
+          const h = params.get("h");
+          history.replaceState(
+            null,
+            "",
+            p + (q ? "?" + q : "") + (h ? "#" + h : ""),
+          );
+        }
+      })();
+    </script>
     <div id="root"></div>
   </body>
 </html>
