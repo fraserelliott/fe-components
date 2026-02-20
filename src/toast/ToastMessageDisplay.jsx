@@ -2,7 +2,7 @@ import { useToast } from "./ToastProvider";
 import { ToastDefaultStyle } from "../styles/toastDefaults";
 import { cx } from "@fraserelliott/fe-utilities";
 import { mergeStyle } from "../util/styleUtil";
-import "@fraserelliott/fe-components/stylesheet";
+import "../styles/fe-components.css";
 
 export function ToastMessageDisplay(props) {
   const { toastMessages, dismissToast } = useToast();

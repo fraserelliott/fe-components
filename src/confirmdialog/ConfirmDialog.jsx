@@ -1,7 +1,7 @@
 import { ConfirmDialogDefaultStyle } from "../styles/confirmDialogDefaults";
 import { useState } from "react";
 import { mergeStyle } from "../util/styleUtil";
-import "@fraserelliott/fe-components/stylesheet";
+import "../styles/fe-components.css";
 
 export function ConfirmDialog({
   open,

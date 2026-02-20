@@ -7,10 +7,12 @@ import { ToastPage } from "@pages/ToastPage";
 import { ConfirmDialogPage } from "@pages/ConfirmDialogPage";
 import { Header } from "@components/Header";
 
+const basename = import.meta.env.PROD ? "/fe-components/" : "/";
+
 function App() {
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />

@@ -15,7 +15,9 @@
     "build": "tsup",
     "dev": "tsup src/index.js --format esm --watch",
     "prepublishOnly": "npm run build",
-    "demo": "cd demo && npm run dev"
+    "demo": "cd demo && npm run dev",
+    "pack:demo": "npm run build && npm pack --silent && ls -t *.tgz | head -n 1 | xargs -I {} cp -f \"{}\" fe-components.tgz",
+    "refresh-demo": "npm run pack:demo && (cd demo && npm install)"
   },
   "peerDependencies": {
     "react": ">=18",

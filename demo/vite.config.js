@@ -8,6 +8,7 @@ export default defineConfig(() => {
   return {
     base: "./",
     plugins: [react()],
+    dedupe: ["react", "react-dom"],
     resolve: {
       alias: {
         "@": path.resolve("src"),
