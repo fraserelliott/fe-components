@@ -1,15 +1,13 @@
 import { useToast } from "./ToastProvider";
 import { ToastDefaultStyle } from "../styles/toastDefaults";
+import { cx } from "@fraserelliott/fe-utilities";
+import { mergeStyle } from "../util/styleUtil";
 
 export function ToastMessageDisplay(props) {
   const { toastMessages, dismissToast } = useToast();
 
   const userStyle = props.style ?? {};
-
-  const style = { ...ToastDefaultStyle };
-  for (const key of Object.keys(userStyle)) {
-    style[key] = cx(ToastDefaultStyle[key], userStyle[key]);
-  }
+  const style = mergeStyle(ToastDefaultStyle, userStyle, "ToastDefaultStyle");
 
   const calculateStyle = (toast) => {
     const base =

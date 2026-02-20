@@ -1,5 +1,6 @@
 import { ConfirmDialogDefaultStyle } from "../styles/confirmDialogDefaults";
 import { useState } from "react";
+import { mergeStyle } from "../util/styleUtil";
 
 export function ConfirmDialog({
   open,
@@ -15,12 +16,13 @@ export function ConfirmDialog({
   if (!open && !keepMounted) return null;
 
   const [pending, setPending] = useState(false);
-  const userStyle = props.style ?? {};
 
-  const style = { ...ConfirmDialogDefaultStyle };
-  for (const key of Object.keys(userStyle)) {
-    style[key] = cx(ConfirmDialogDefaultStyle[key], userStyle[key]);
-  }
+  const userStyle = style ?? {};
+  const mergedStyle = mergeStyle(
+    ConfirmDialogDefaultStyle,
+    userStyle,
+    "ConfirmDialogDefaultStyle",
+  );
 
   const handleCancel = async () => {
     try {
@@ -47,14 +49,16 @@ export function ConfirmDialog({
   };
 
   return (
-    <div className={style.Overlay()}>
-      <div className={style.Panel()}>
-        {heading !== undefined && <h1 classList={style.Header()}>{heading}</h1>}
-        {text !== undefined && <p>{text}</p>}
-        <div classList={style.ContainerBtn()}>
+    <div className={mergedStyle.Overlay()}>
+      <div className={mergedStyle.Panel()}>
+        {heading !== undefined && (
+          <h1 className={mergedStyle.Heading()}>{heading}</h1>
+        )}
+        <p className="fe-grow-1">{text !== undefined && <span>{text}</span>}</p>
+        <div className={mergedStyle.ContainerBtn()}>
           <button
             onClick={() => handleCancel()}
-            classList={style.BtnDanger()}
+            className={mergedStyle.BtnDanger()}
             disabled={pending}
             aria-busy={pending}
           >
@@ -62,7 +66,7 @@ export function ConfirmDialog({
           </button>
           <button
             onClick={() => handleConfirm()}
-            classList={style.BtnConfirm()}
+            className={mergedStyle.BtnConfirm()}
             disabled={pending}
             aria-busy={pending}
           >

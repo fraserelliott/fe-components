@@ -123,3 +123,10 @@
   bottom: 3rem;
   right: 1rem;
 }
+
+.confirm-dialog {
+  width: clamp(300px, 60vw, 400px);
+  height: clamp(200px, 60vh, 300px);
+  max-width: 90vw;
+  max-height: 90vh;
+}

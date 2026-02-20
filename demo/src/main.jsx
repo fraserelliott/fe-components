@@ -5,6 +5,6 @@ import { ToastProvider } from "@fe-components/";
 
 createRoot(document.getElementById("root")).render(
   <ToastProvider>
-    <App />,
+    <App />
   </ToastProvider>,
 );
