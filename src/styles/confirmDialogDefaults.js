@@ -5,7 +5,7 @@ export const ConfirmDialogDefaultStyle = {
   Panel: (...extra) =>
     cx(
       S.Panel,
-      "fe-d-flex fe-flex-column fe-justify-center fe-items-center fec-z-top confirm-dialog fe-p-em-3",
+      "fe-d-flex fe-flex-column fe-justify-center fe-items-center fec-z-top fec-confirm-dialog fe-p-em-3",
       ...extra,
     ),
   BtnConfirm: S.BtnConfirm,
