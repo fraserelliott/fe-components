@@ -1,5 +1,5 @@
 import { cx } from "@fraserelliott/fe-utilities/cx";
-import { DefaultStyle } from "@fe-components";
+import { DefaultStyle } from "@fraserelliott/fe-components";
 
 export const UI = {
   Navbar: (...extra) =>

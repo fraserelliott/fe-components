@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fraserelliott/fe-utilities": "^0.3.0",
+    "@fraserelliott/fe-components": "file:..",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.71.1",

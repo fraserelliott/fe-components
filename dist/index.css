@@ -1,0 +1,102 @@
+/* src/styles/fe-components.css */
+:root {
+  --fec-bg-primary: #f6f6f3;
+  --fec-bg-secondary: #ecece7;
+  --fec-bg-panel: #ffffff;
+  --fec-bg-active: #cfd8e3;
+  --fec-text-primary: #1f1f1f;
+  --fec-text-secondary: #5a5a5a;
+  --fec-confirm: #4caf50;
+  --fec-danger: #d9534f;
+  --fec-border-subtle: #d6d6d0;
+  --fec-shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.05), 0 3px 6px rgba(0, 0, 0, 0.06);
+  --fec-shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.06);
+}
+.fec-bg-primary {
+  background-color: var(--fec-bg-primary);
+}
+.fec-bg-secondary {
+  background-color: var(--fec-bg-secondary);
+}
+.fec-bg-active {
+  background-color: var(--fec-bg-active);
+}
+.fec-btn:hover {
+  background-color: var(--fec-bg-active);
+}
+.fec-bg-panel {
+  background-color: var(--fec-bg-panel);
+}
+.fec-color-primary {
+  color: var(--fec-text-primary);
+}
+.fec-color-secondary {
+  color: var(--fec-text-secondary);
+}
+.fec-bg-confirm {
+  background-color: var(--fec-confirm);
+}
+.fec-color-confirm {
+  color: var(--fec-confirm);
+}
+.fec-bg-danger {
+  background-color: var(--fec-danger);
+}
+.fec-color-danger {
+  color: var(--fec-danger);
+}
+.fec-border-subtle {
+  border: var(--fec-border-subtle);
+}
+.fec-shadow-soft {
+  box-shadow: var(--fec-shadow-soft);
+}
+.fec-shadow-medium {
+  box-shadow: var(--fec-shadow-medium);
+}
+.fec-opacity-80 {
+  opacity: 0.8;
+}
+.fec-opacity-0 {
+  opacity: 0;
+}
+.fec-z-top {
+  z-index: 1100;
+}
+.fec-opacity-ease-out {
+  transition: opacity 0.15s ease-out;
+}
+.fec-w-200 {
+  width: 200px;
+}
+.fec-toast {
+  width: 200px;
+  min-height: 50px;
+}
+.fec-overlay {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  width: 100%;
+  height: 100%;
+}
+.fec-toast-container {
+  position: fixed;
+  bottom: 3rem;
+  right: 1rem;
+}
+.fec-confirm-dialog {
+  width: clamp(300px, 60vw, 400px);
+  height: clamp(200px, 60vh, 300px);
+  max-width: 90vw;
+  max-height: 90vh;
+}
+.fec-home-panel {
+  width: clamp(300px, 75vw, 400px);
+  max-width: 90vw;
+}
+/*# sourceMappingURL=index.css.map */

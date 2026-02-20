@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useToast } from "@fe-components";
+import { useToast } from "@fraserelliott/fe-components";
 import { UI } from "@styles";
 
 export function ToastForm({ title, type }) {

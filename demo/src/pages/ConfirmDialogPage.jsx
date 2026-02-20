@@ -1,4 +1,4 @@
-import { ConfirmDialog, OptionalPortal } from "@fe-components";
+import { ConfirmDialog, OptionalPortal } from "@fraserelliott/fe-components";
 import { UI } from "@styles";
 import { useState } from "react";
 

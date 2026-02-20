@@ -6,6 +6,7 @@ export default defineConfig(() => {
   console.log("PAGES ALIAS =", path.resolve("src/pages"));
 
   return {
+    base: "./",
     plugins: [react()],
     resolve: {
       alias: {
@@ -13,7 +14,6 @@ export default defineConfig(() => {
         "@pages": path.resolve("src/pages"),
         "@components": path.resolve("src/components"),
         "@styles": path.resolve("src/styles"),
-        "@fe-components": path.resolve("../src"),
       },
     },
   };

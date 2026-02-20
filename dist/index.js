@@ -9,6 +9,7 @@ import {
   useContext
 } from "react";
 import { v4 as uuid } from "uuid";
+import { jsx } from "react/jsx-runtime";
 var ToastContext = createContext();
 function ToastProvider({
   children,
@@ -80,7 +81,7 @@ function ToastProvider({
     () => ({ toastMessages, addToastMessage, dismissToast }),
     [toastMessages, addToastMessage, dismissToast]
   );
-  return /* @__PURE__ */ React.createElement(ToastContext.Provider, { value }, children);
+  return /* @__PURE__ */ jsx(ToastContext.Provider, { value, children });
 }
 function useToast() {
   const ctx = useContext(ToastContext);
@@ -139,6 +140,7 @@ function mergeStyle(defaultStyle, userStyle, styleName) {
 }
 
 // src/toast/ToastMessageDisplay.jsx
+import { jsx as jsx2 } from "react/jsx-runtime";
 function ToastMessageDisplay(props) {
   const { toastMessages, dismissToast } = useToast();
   const userStyle = props.style ?? {};
@@ -147,19 +149,19 @@ function ToastMessageDisplay(props) {
     const base = toast.type === "success" ? style.Success : toast.type === "error" ? style.Error : style.Panel;
     return cx4(base, toast.fading && style.Fading);
   };
-  return /* @__PURE__ */ React.createElement("div", { className: style.StackingContainer() }, toastMessages.map((toast) => {
-    return /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ jsx2("div", { className: style.StackingContainer(), children: toastMessages.map((toast) => {
+    return /* @__PURE__ */ jsx2(
       "p",
       {
-        key: toast.id,
         className: calculateStyle(toast),
         onClick: () => props.clearOnClick && dismissToast(toast.id),
         role: "button",
-        tabIndex: 0
+        tabIndex: 0,
+        children: toast.message
       },
-      toast.message
+      toast.id
     );
-  }));
+  }) });
 }
 
 // src/styles/confirmDialogDefaults.js
@@ -182,6 +184,7 @@ var ConfirmDialogDefaultStyle = {
 
 // src/confirmdialog/ConfirmDialog.jsx
 import { useState as useState2 } from "react";
+import { jsx as jsx3, jsxs } from "react/jsx-runtime";
 function ConfirmDialog({
   open,
   onConfirm,
@@ -223,25 +226,32 @@ function ConfirmDialog({
       onError == null ? void 0 : onError({ source: "confirm", err });
     }
   };
-  return /* @__PURE__ */ React.createElement("div", { className: mergedStyle.Overlay() }, /* @__PURE__ */ React.createElement("div", { className: mergedStyle.Panel() }, heading !== void 0 && /* @__PURE__ */ React.createElement("h1", { className: mergedStyle.Heading() }, heading), /* @__PURE__ */ React.createElement("p", { className: "fe-grow-1" }, text !== void 0 && /* @__PURE__ */ React.createElement("span", null, text)), /* @__PURE__ */ React.createElement("div", { className: mergedStyle.ContainerBtn() }, /* @__PURE__ */ React.createElement(
-    "button",
-    {
-      onClick: () => handleCancel(),
-      className: mergedStyle.BtnDanger(),
-      disabled: pending,
-      "aria-busy": pending
-    },
-    "Cancel"
-  ), /* @__PURE__ */ React.createElement(
-    "button",
-    {
-      onClick: () => handleConfirm(),
-      className: mergedStyle.BtnConfirm(),
-      disabled: pending,
-      "aria-busy": pending
-    },
-    pending ? "Working..." : "Confirm"
-  ))));
+  return /* @__PURE__ */ jsx3("div", { className: mergedStyle.Overlay(), children: /* @__PURE__ */ jsxs("div", { className: mergedStyle.Panel(), children: [
+    heading !== void 0 && /* @__PURE__ */ jsx3("h1", { className: mergedStyle.Heading(), children: heading }),
+    /* @__PURE__ */ jsx3("p", { className: "fe-grow-1", children: text !== void 0 && /* @__PURE__ */ jsx3("span", { children: text }) }),
+    /* @__PURE__ */ jsxs("div", { className: mergedStyle.ContainerBtn(), children: [
+      /* @__PURE__ */ jsx3(
+        "button",
+        {
+          onClick: () => handleCancel(),
+          className: mergedStyle.BtnDanger(),
+          disabled: pending,
+          "aria-busy": pending,
+          children: "Cancel"
+        }
+      ),
+      /* @__PURE__ */ jsx3(
+        "button",
+        {
+          onClick: () => handleConfirm(),
+          className: mergedStyle.BtnConfirm(),
+          disabled: pending,
+          "aria-busy": pending,
+          children: pending ? "Working..." : "Confirm"
+        }
+      )
+    ] })
+  ] }) });
 }
 
 // src/optionalportal/OptionalPortal.jsx
@@ -262,3 +272,4 @@ export {
   ToastProvider,
   useToast
 };
+//# sourceMappingURL=index.js.map

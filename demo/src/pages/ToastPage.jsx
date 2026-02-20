@@ -1,5 +1,8 @@
 import { ToastForm } from "@components/ToastForm";
-import { ToastMessageDisplay, OptionalPortal } from "@fe-components";
+import {
+  ToastMessageDisplay,
+  OptionalPortal,
+} from "@fraserelliott/fe-components";
 import { UI } from "@styles";
 
 export function ToastPage() {

@@ -5,13 +5,14 @@
   "type": "module",
   "main": "./dist/index.js",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./stylesheet": "./dist/index.css"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.js --format esm --clean",
+    "build": "tsup",
     "dev": "tsup src/index.js --format esm --watch",
     "prepublishOnly": "npm run build",
     "demo": "cd demo && npm run dev"
@@ -31,5 +32,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "sideEffects": false
+  "sideEffects": [
+    "*.css"
+  ]
 }

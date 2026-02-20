@@ -1,5 +1,5 @@
 import "./App.css";
-import "@fe-components/styles/fe-components.css";
+import "@fraserelliott/fe-components/stylesheet";
 import "@fraserelliott/fe-utilities/fe-utilities.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { HomePage } from "@pages/HomePage";
