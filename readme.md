@@ -139,7 +139,7 @@ import { ToastProvider } from "@fraserelliott/fe-components";
 
 <ToastProvider>
   <App />
-</ToastProvider>;
+</ToastProvider>
 ```
 
 2. Render the display (often in a portal):
