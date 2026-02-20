@@ -10,15 +10,17 @@
   <body>
     <script>
       (function () {
+        const repo = "/fe-components";
         const params = new URLSearchParams(location.search);
         const p = params.get("p");
         if (p) {
           const q = params.get("q");
           const h = params.get("h");
+
           history.replaceState(
             null,
             "",
-            p + (q ? "?" + q : "") + (h ? "#" + h : ""),
+            repo + p + (q ? "?" + q : "") + (h ? "#" + h : ""),
           );
         }
       })();
