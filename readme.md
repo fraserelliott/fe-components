@@ -28,7 +28,7 @@ It should work fine in other React setups too. If something behaves unexpectedly
 
 A live demo showcasing the available components, default styling, and typical integration patterns is available here:
 
-👉 **[View Demo](#)**
+👉 **[View Demo](https://fraserelliott.github.io/fe-components/)**
 
 The demo uses the library exactly as it would be used in a real project with the default styles. It’s intended to serve as:
 
