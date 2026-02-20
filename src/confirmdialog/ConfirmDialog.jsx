@@ -15,7 +15,12 @@ export function ConfirmDialog({
   if (!open && !keepMounted) return null;
 
   const [pending, setPending] = useState(false);
-  const mergedStyle = { ...ConfirmDialogDefaultStyle, ...(style ?? {}) };
+  const userStyle = props.style ?? {};
+
+  const style = { ...ConfirmDialogDefaultStyle };
+  for (const key of Object.keys(userStyle)) {
+    style[key] = cx(ConfirmDialogDefaultStyle[key], userStyle[key]);
+  }
 
   const handleCancel = async () => {
     try {
@@ -42,16 +47,14 @@ export function ConfirmDialog({
   };
 
   return (
-    <div className={mergedStyle.Overlay()}>
-      <div className={mergedStyle.Panel()}>
-        {heading !== undefined && (
-          <h1 classList={mergedStyle.Header()}>{heading}</h1>
-        )}
+    <div className={style.Overlay()}>
+      <div className={style.Panel()}>
+        {heading !== undefined && <h1 classList={style.Header()}>{heading}</h1>}
         {text !== undefined && <p>{text}</p>}
-        <div classList={mergedStyle.ContainerBtn()}>
+        <div classList={style.ContainerBtn()}>
           <button
             onClick={() => handleCancel()}
-            classList={mergedStyle.BtnDanger()}
+            classList={style.BtnDanger()}
             disabled={pending}
             aria-busy={pending}
           >
@@ -59,7 +62,7 @@ export function ConfirmDialog({
           </button>
           <button
             onClick={() => handleConfirm()}
-            classList={mergedStyle.BtnConfirm()}
+            classList={style.BtnConfirm()}
             disabled={pending}
             aria-busy={pending}
           >
