@@ -16,4 +16,5 @@ export default defineConfig({
     options.jsx = "automatic";
     options.jsxImportSource = "react";
   },
+  css: true,
 });

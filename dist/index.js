@@ -228,7 +228,7 @@ function ConfirmDialog({
   };
   return /* @__PURE__ */ jsx3("div", { className: mergedStyle.Overlay(), children: /* @__PURE__ */ jsxs("div", { className: mergedStyle.Panel(), children: [
     heading !== void 0 && /* @__PURE__ */ jsx3("h1", { className: mergedStyle.Heading(), children: heading }),
-    /* @__PURE__ */ jsx3("p", { className: "fe-grow-1", children: text !== void 0 && /* @__PURE__ */ jsx3("span", { children: text }) }),
+    text !== void 0 && /* @__PURE__ */ jsx3("p", { className: "fe-grow-1", children: text }),
     /* @__PURE__ */ jsxs("div", { className: mergedStyle.ContainerBtn(), children: [
       /* @__PURE__ */ jsx3(
         "button",

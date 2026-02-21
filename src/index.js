@@ -1,3 +1,5 @@
+import "./styles/fe-components.css";
+
 export { ToastProvider, useToast } from "./toast/ToastProvider";
 export { ToastMessageDisplay } from "./toast/ToastMessageDisplay";
 export { ConfirmDialog } from "./confirmdialog/ConfirmDialog";

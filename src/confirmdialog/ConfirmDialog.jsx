@@ -55,7 +55,7 @@ export function ConfirmDialog({
         {heading !== undefined && (
           <h1 className={mergedStyle.Heading()}>{heading}</h1>
         )}
-        <p className="fe-grow-1">{text !== undefined && <span>{text}</span>}</p>
+        {text !== undefined && <p className="fe-grow-1">{text}</p>}
         <div className={mergedStyle.ContainerBtn()}>
           <button
             onClick={() => handleCancel()}

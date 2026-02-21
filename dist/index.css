@@ -95,6 +95,12 @@
   max-width: 90vw;
   max-height: 90vh;
 }
+.fec-confirm-dialog p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
 .fec-home-panel {
   width: clamp(300px, 75vw, 400px);
   max-width: 90vw;
