@@ -10,6 +10,10 @@
   background-color: var(--fec-bg-active, #cfd8e3);
 }
 
+.fec-btn-primary {
+  background-color: var(--fec-btn-primary, #f6f6f3);
+}
+
 .fec-btn:hover {
   background-color: var(--fec-bg-active, #cfd8e3);
 }

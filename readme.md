@@ -120,6 +120,7 @@ All visual aspects of `fe-components` can be customised by overriding the follow
 | `--fec-bg-primary`   | `#f6f6f3` | Primary app background  |
 | `--fec-bg-secondary` | `#ecece7` | Secondary surface       |
 | `--fec-bg-panel`     | `#ffffff` | Panel / card background |
+| `--fec-btn-primary`  | `#f6f6f3` | Primary button colour   |
 | `--fec-bg-active`    | `#cfd8e3` | Hover / active states   |
 
 ---
