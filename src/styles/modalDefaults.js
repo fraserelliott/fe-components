@@ -5,7 +5,7 @@ export const ModalDefaultStyle = {
   Panel: (...extra) =>
     cx(
       S.Panel,
-      "fe-d-flex fe-flex-column fe-items-center fe-justify-center fec-z-top fec-modal fe-p-em-3",
+      "fe-d-flex fe-flex-column fe-justify-center fec-z-top fec-modal fe-p-em-3",
       ...extra,
     ),
   BtnPrimary: S.BtnPrimary,

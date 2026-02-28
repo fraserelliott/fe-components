@@ -56,8 +56,11 @@ export function Modal({
           )}
           <button onClick={() => onOpenChange?.(false)}>X</button>
         </div>
-        <div className="fe-grow-1">{children}</div>
-        <div>
+        <div className="fec-modal-body">
+          <div className="fec-modal-body-inner">{children}</div>
+        </div>
+
+        <div className="fe-d-flex fe-justify-center">
           <button
             className={mergedStyle.BtnPrimary()}
             onClick={() => onOpenChange?.(false)}

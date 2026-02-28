@@ -295,7 +295,7 @@ import { cx as cx6 } from "@fraserelliott/fe-utilities/cx";
 var ModalDefaultStyle = {
   Panel: (...extra) => cx6(
     DefaultStyle.Panel,
-    "fe-d-flex fe-flex-column fe-items-center fe-justify-center fec-z-top fec-modal fe-p-em-3",
+    "fe-d-flex fe-flex-column fe-justify-center fec-z-top fec-modal fe-p-em-3",
     ...extra
   ),
   BtnPrimary: DefaultStyle.BtnPrimary,
@@ -351,8 +351,8 @@ function Modal({
           heading !== void 0 && /* @__PURE__ */ jsx4("h1", { className: mergedStyle.Heading(), children: heading }),
           /* @__PURE__ */ jsx4("button", { onClick: () => onOpenChange == null ? void 0 : onOpenChange(false), children: "X" })
         ] }),
-        /* @__PURE__ */ jsx4("div", { className: "fe-grow-1", children }),
-        /* @__PURE__ */ jsx4("div", { children: /* @__PURE__ */ jsx4(
+        /* @__PURE__ */ jsx4("div", { className: "fec-modal-body", children: /* @__PURE__ */ jsx4("div", { className: "fec-modal-body-inner", children }) }),
+        /* @__PURE__ */ jsx4("div", { className: "fe-d-flex fe-justify-center", children: /* @__PURE__ */ jsx4(
           "button",
           {
             className: mergedStyle.BtnPrimary(),
