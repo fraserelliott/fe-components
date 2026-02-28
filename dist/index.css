@@ -115,8 +115,8 @@
   text-align: center;
 }
 .fec-modal {
-  width: var(--fec-modal-w, clamp(320px, 80vw, 720px));
-  height: var(--fec-modal-h, clamp(240px, 80vh, 560px));
+  width: var(--fec-modal-w, clamp(320px, 80vw, 1536px));
+  height: var(--fec-modal-h, clamp(240px, 80vh, 864px));
   max-width: 90vw;
   max-height: 90vh;
 }

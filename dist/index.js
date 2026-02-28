@@ -102,7 +102,11 @@ var DefaultStyle = {
   BtnPrimary: (...extra) => cx(FEPresets.Btn, "fec-bg-primary fec-btn fe-pressable", ...extra),
   BtnDanger: (...extra) => cx(FEPresets.Btn, "fec-bg-danger fec-btn fe-pressable", ...extra),
   BtnConfirm: (...extra) => cx(FEPresets.Btn, "fec-bg-confirm fec-btn fe-pressable", ...extra),
-  Heading: (...extra) => cx("fe-fw-bold", ...extra)
+  Heading: (...extra) => cx("fe-fw-bold", ...extra),
+  Overlay: (...extra) => cx(
+    "fe-pos-fixed fe-d-flex fe-justify-center fe-items-center fec-z-top fec-overlay",
+    ...extra
+  )
 };
 
 // src/styles/toastDefaults.js
@@ -202,10 +206,7 @@ var ConfirmDialogDefaultStyle = {
   BtnDanger: DefaultStyle.BtnDanger,
   Heading: DefaultStyle.Heading,
   ContainerBtn: (...extra) => cx5("fe-d-flex fe-justify-around fe-w-100", ...extra),
-  Overlay: (...extra) => cx5(
-    "fe-pos-fixed fe-d-flex fe-justify-center fe-items-center fec-z-top fec-overlay",
-    ...extra
-  )
+  Overlay: DefaultStyle.Overlay
 };
 
 // src/confirmdialog/ConfirmDialog.jsx
@@ -288,10 +289,87 @@ function OptionalPortal({ children, portalTarget }) {
   if (!target) return children;
   return createPortal(children, target);
 }
+
+// src/styles/modalDefaults.js
+import { cx as cx6 } from "@fraserelliott/fe-utilities/cx";
+var ModalDefaultStyle = {
+  Panel: (...extra) => cx6(
+    DefaultStyle.Panel,
+    "fe-d-flex fe-flex-column fe-items-center fe-justify-center fec-z-top fec-modal fe-p-em-3",
+    ...extra
+  ),
+  BtnPrimary: DefaultStyle.BtnPrimary,
+  Overlay: DefaultStyle.Overlay,
+  Heading: (...extra) => cx6("fe-fw-bold", ...extra)
+};
+
+// src/modal/Modal.jsx
+import { useEffect as useEffect2 } from "react";
+import { jsx as jsx4, jsxs as jsxs2 } from "react/jsx-runtime";
+function Modal({
+  open,
+  onOpenChange,
+  heading,
+  style,
+  keepMounted,
+  children,
+  closeOnEscape = true,
+  closeOnBackdropClick = true
+}) {
+  if (!open && !keepMounted) return null;
+  const userStyle = style ?? {};
+  const mergedStyle = mergeStyle(
+    ModalDefaultStyle,
+    userStyle,
+    "ModalDefaultStyle"
+  );
+  useEffect2(() => {
+    if (!open || !closeOnEscape) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onOpenChange == null ? void 0 : onOpenChange(false);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open, closeOnEscape, onOpenChange]);
+  return /* @__PURE__ */ jsx4(
+    "div",
+    {
+      className: mergedStyle.Overlay(),
+      onClick: (e) => {
+        if (!closeOnBackdropClick) return;
+        if (e.target === e.currentTarget) {
+          onOpenChange == null ? void 0 : onOpenChange(false);
+        }
+      },
+      children: /* @__PURE__ */ jsxs2("div", { className: mergedStyle.Panel(), children: [
+        /* @__PURE__ */ jsxs2("div", { className: "fe-d-flex fe-justify-between fe-w-100", children: [
+          /* @__PURE__ */ jsx4("div", {}),
+          heading !== void 0 && /* @__PURE__ */ jsx4("h1", { className: mergedStyle.Heading(), children: heading }),
+          /* @__PURE__ */ jsx4("button", { onClick: () => onOpenChange == null ? void 0 : onOpenChange(false), children: "X" })
+        ] }),
+        /* @__PURE__ */ jsx4("div", { className: "fe-grow-1", children }),
+        /* @__PURE__ */ jsx4("div", { children: /* @__PURE__ */ jsx4(
+          "button",
+          {
+            className: mergedStyle.BtnPrimary(),
+            onClick: () => onOpenChange == null ? void 0 : onOpenChange(false),
+            children: "Close"
+          }
+        ) })
+      ] })
+    }
+  );
+}
 export {
   ConfirmDialog,
   ConfirmDialogDefaultStyle,
   DefaultStyle,
+  Modal,
+  ModalDefaultStyle,
   OptionalPortal,
   ToastDefaultStyle,
   ToastMessageDisplay,

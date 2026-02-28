@@ -13,9 +13,5 @@ export const ConfirmDialogDefaultStyle = {
   Heading: S.Heading,
   ContainerBtn: (...extra) =>
     cx("fe-d-flex fe-justify-around fe-w-100", ...extra),
-  Overlay: (...extra) =>
-    cx(
-      "fe-pos-fixed fe-d-flex fe-justify-center fe-items-center fec-z-top fec-overlay",
-      ...extra,
-    ),
+  Overlay: S.Overlay,
 };

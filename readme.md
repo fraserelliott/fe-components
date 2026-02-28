@@ -181,10 +181,10 @@ All visual aspects of `fe-components` can be customised by overriding the follow
 
 ### Modal Sizing
 
-| Variable        | Default                     |
-| --------------- | --------------------------- |
-| `--fec-modal-w` | `clamp(320px, 80vw, 720px)` |
-| `--fec-modal-h` | `clamp(240px, 80vh, 560px)` |
+| Variable        | Default                      |
+| --------------- | ---------------------------- |
+| `--fec-modal-w` | `clamp(320px, 80vw, 1536px)` |
+| `--fec-modal-h` | `clamp(240px, 80vh, 864px)`  |
 
 ---
 
