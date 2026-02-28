@@ -13,8 +13,6 @@ export function Modal({
   closeOnEscape = true,
   closeOnBackdropClick = true,
 }) {
-  if (!open && !keepMounted) return null;
-
   const userStyle = style ?? {};
   const mergedStyle = mergeStyle(
     ModalDefaultStyle,
@@ -36,6 +34,8 @@ export function Modal({
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [open, closeOnEscape, onOpenChange]);
+
+  if (!open && !keepMounted) return null;
 
   return (
     <div
