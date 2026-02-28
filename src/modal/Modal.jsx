@@ -54,7 +54,12 @@ export function Modal({
           {heading !== undefined && (
             <h1 className={mergedStyle.Heading()}>{heading}</h1>
           )}
-          <button onClick={() => onOpenChange?.(false)}>X</button>
+          <button
+            onClick={() => onOpenChange?.(false)}
+            className={mergedStyle.BtnPrimary()}
+          >
+            X
+          </button>
         </div>
         <div className="fec-modal-body">
           <div className="fec-modal-body-inner">{children}</div>

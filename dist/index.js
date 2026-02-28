@@ -99,7 +99,7 @@ var DefaultStyle = {
     ...extra
   ),
   Btn: (...extra) => cx(FEPresets.Btn, "fec-btn fe-pressable", ...extra),
-  BtnPrimary: (...extra) => cx(FEPresets.Btn, "fec-bg-primary fec-btn fe-pressable", ...extra),
+  BtnPrimary: (...extra) => cx(FEPresets.Btn, "fec-btn-primary fec-btn fe-pressable", ...extra),
   BtnDanger: (...extra) => cx(FEPresets.Btn, "fec-bg-danger fec-btn fe-pressable", ...extra),
   BtnConfirm: (...extra) => cx(FEPresets.Btn, "fec-bg-confirm fec-btn fe-pressable", ...extra),
   Heading: (...extra) => cx("fe-fw-bold", ...extra),
@@ -349,7 +349,14 @@ function Modal({
         /* @__PURE__ */ jsxs2("div", { className: "fe-d-flex fe-justify-between fe-w-100", children: [
           /* @__PURE__ */ jsx4("div", {}),
           heading !== void 0 && /* @__PURE__ */ jsx4("h1", { className: mergedStyle.Heading(), children: heading }),
-          /* @__PURE__ */ jsx4("button", { onClick: () => onOpenChange == null ? void 0 : onOpenChange(false), children: "X" })
+          /* @__PURE__ */ jsx4(
+            "button",
+            {
+              onClick: () => onOpenChange == null ? void 0 : onOpenChange(false),
+              className: mergedStyle.BtnPrimary(),
+              children: "X"
+            }
+          )
         ] }),
         /* @__PURE__ */ jsx4("div", { className: "fec-modal-body", children: /* @__PURE__ */ jsx4("div", { className: "fec-modal-body-inner", children }) }),
         /* @__PURE__ */ jsx4("div", { className: "fe-d-flex fe-justify-center", children: /* @__PURE__ */ jsx4(

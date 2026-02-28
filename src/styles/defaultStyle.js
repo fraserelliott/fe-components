@@ -8,7 +8,7 @@ export const DefaultStyle = {
     ),
   Btn: (...extra) => cx(FEPresets.Btn, "fec-btn fe-pressable", ...extra),
   BtnPrimary: (...extra) =>
-    cx(FEPresets.Btn, "fec-bg-primary fec-btn fe-pressable", ...extra),
+    cx(FEPresets.Btn, "fec-btn-primary fec-btn fe-pressable", ...extra),
   BtnDanger: (...extra) =>
     cx(FEPresets.Btn, "fec-bg-danger fec-btn fe-pressable", ...extra),
   BtnConfirm: (...extra) =>
