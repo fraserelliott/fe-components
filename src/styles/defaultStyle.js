@@ -3,7 +3,7 @@ import { cx, FEPresets } from "@fraserelliott/fe-utilities";
 export const DefaultStyle = {
   Panel: (...extra) =>
     cx(
-      "fe-rounded-2 fe-p-em-2 fec-bg-panel fec-text-primary fec-border-subtle fec-shadow-soft",
+      "fe-rounded-2 fe-p-em-2 fec-bg-panel fec-text-primary fec-border fec-shadow-soft",
       ...extra,
     ),
   Btn: (...extra) => cx(FEPresets.Btn, "fec-btn fe-pressable", ...extra),

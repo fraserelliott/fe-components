@@ -95,7 +95,7 @@ function useToast() {
 import { cx, FEPresets } from "@fraserelliott/fe-utilities";
 var DefaultStyle = {
   Panel: (...extra) => cx(
-    "fe-rounded-2 fe-p-em-2 fec-bg-panel fec-text-primary fec-border-subtle fec-shadow-soft",
+    "fe-rounded-2 fe-p-em-2 fec-bg-panel fec-text-primary fec-border fec-shadow-soft",
     ...extra
   ),
   Btn: (...extra) => cx(FEPresets.Btn, "fec-btn fe-pressable", ...extra),
@@ -112,10 +112,7 @@ var ToastDefaultStyle = {
   Panel: (...extra) => cx2(DefaultStyle.Panel, neutralToast, ...extra),
   Success: (...extra) => cx2(DefaultStyle.Panel, neutralToast, "fec-bg-confirm", ...extra),
   Error: (...extra) => cx2(DefaultStyle.Panel, neutralToast, "fec-bg-danger", ...extra),
-  StackingContainer: (...extra) => cx2(
-    "fe-d-flex fe-flex-column-reverse fe-gap-1 fec-toast-container",
-    ...extra
-  ),
+  StackingContainer: (...extra) => cx2("fe-d-flex fe-gap-1 fec-toast-container", ...extra),
   Fading: (...extra) => cx2("fec-opacity-0", ...extra)
 };
 
@@ -141,27 +138,56 @@ function mergeStyle(defaultStyle, userStyle, styleName) {
 
 // src/toast/ToastMessageDisplay.jsx
 import { jsx as jsx2 } from "react/jsx-runtime";
-function ToastMessageDisplay(props) {
+var validDirections = /* @__PURE__ */ new Set([
+  "row",
+  "row-reverse",
+  "column",
+  "column-reverse"
+]);
+var positionClassMap = {
+  "bottom-right": "fec-toast-pos-br",
+  "bottom-left": "fec-toast-pos-bl",
+  "top-right": "fec-toast-pos-tr",
+  "top-left": "fec-toast-pos-tl"
+};
+function ToastMessageDisplay({
+  style: userStyle = {},
+  direction = "column-reverse",
+  position = "bottom-right",
+  clearOnClick = false
+}) {
   const { toastMessages, dismissToast } = useToast();
-  const userStyle = props.style ?? {};
-  const style = mergeStyle(ToastDefaultStyle, userStyle, "ToastDefaultStyle");
+  const resolvedDirection = validDirections.has(direction) ? direction : "column-reverse";
+  const resolvedPosition = positionClassMap[position] ?? positionClassMap["bottom-right"];
+  const mergedStyle = mergeStyle(
+    ToastDefaultStyle,
+    userStyle,
+    "ToastDefaultStyle"
+  );
   const calculateStyle = (toast) => {
-    const base = toast.type === "success" ? style.Success : toast.type === "error" ? style.Error : style.Panel;
-    return cx4(base, toast.fading && style.Fading);
+    const base = toast.type === "success" ? mergedStyle.Success : toast.type === "error" ? mergedStyle.Error : mergedStyle.Panel;
+    return cx4(base, toast.fading && mergedStyle.Fading);
   };
-  return /* @__PURE__ */ jsx2("div", { className: style.StackingContainer(), children: toastMessages.map((toast) => {
-    return /* @__PURE__ */ jsx2(
-      "p",
-      {
-        className: calculateStyle(toast),
-        onClick: () => props.clearOnClick && dismissToast(toast.id),
-        role: "button",
-        tabIndex: 0,
-        children: toast.message
-      },
-      toast.id
-    );
-  }) });
+  return /* @__PURE__ */ jsx2(
+    "div",
+    {
+      className: mergedStyle.StackingContainer(resolvedPosition),
+      style: { flexDirection: resolvedDirection },
+      children: toastMessages.map((toast) => {
+        return /* @__PURE__ */ jsx2(
+          "p",
+          {
+            className: calculateStyle(toast),
+            onClick: () => clearOnClick && dismissToast(toast.id),
+            role: "button",
+            tabIndex: 0,
+            children: toast.message
+          },
+          toast.id
+        );
+      })
+    }
+  );
 }
 
 // src/styles/confirmDialogDefaults.js

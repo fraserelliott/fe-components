@@ -9,9 +9,6 @@ export const ToastDefaultStyle = {
   Success: (...extra) => cx(S.Panel, neutralToast, "fec-bg-confirm", ...extra),
   Error: (...extra) => cx(S.Panel, neutralToast, "fec-bg-danger", ...extra),
   StackingContainer: (...extra) =>
-    cx(
-      "fe-d-flex fe-flex-column-reverse fe-gap-1 fec-toast-container",
-      ...extra,
-    ),
+    cx("fe-d-flex fe-gap-1 fec-toast-container", ...extra),
   Fading: (...extra) => cx("fec-opacity-0", ...extra),
 };

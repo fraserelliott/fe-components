@@ -52,6 +52,97 @@ Each slot can be **one of two things**:
 
 Why allow functions? Mostly ergonomics: it makes composing and reusing style helpers easier without needing to remember `()` everywhere.
 
+---
+
+### 🎨 Theming Tokens
+
+All visual aspects of `fe-components` can be customised by overriding the following CSS variables If not defined, the values below are used as fallbacks.
+
+```css
+:root {
+  --fec-bg-primary: #111;
+  --fec-text-primary: #eee;
+  --fec-confirm: #00c853;
+}
+```
+
+---
+
+#### Backgrounds
+
+| Variable             | Default   | Used For                |
+| -------------------- | --------- | ----------------------- |
+| `--fec-bg-primary`   | `#f6f6f3` | Primary app background  |
+| `--fec-bg-secondary` | `#ecece7` | Secondary surface       |
+| `--fec-bg-panel`     | `#ffffff` | Panel / card background |
+| `--fec-bg-active`    | `#cfd8e3` | Hover / active states   |
+
+---
+
+#### Text
+
+| Variable               | Default   | Used For   |
+| ---------------------- | --------- | ---------- |
+| `--fec-text-primary`   | `#1f1f1f` | Main text  |
+| `--fec-text-secondary` | `#5a5a5a` | Muted text |
+
+---
+
+#### Semantic Colours
+
+| Variable        | Default   | Used For                  |
+| --------------- | --------- | ------------------------- |
+| `--fec-confirm` | `#4caf50` | Success / confirm actions |
+| `--fec-danger`  | `#d9534f` | Danger / error actions    |
+
+---
+
+#### Borders
+
+| Variable             | Default   | Used For              |
+| -------------------- | --------- | --------------------- |
+| `--fec-border-width` | `1px`     | Default border width  |
+| `--fec-border-style` | `solid`   | Default border style  |
+| `--fec-border-color` | `#d6d6d0` | Default border colour |
+
+---
+
+#### Shadows
+
+| Variable              | Default                                                   |
+| --------------------- | --------------------------------------------------------- |
+| `--fec-shadow-soft`   | `0 1px 2px rgba(0,0,0,0.05), 0 3px 6px rgba(0,0,0,0.06)`  |
+| `--fec-shadow-medium` | `0 4px 8px rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.06)` |
+
+---
+
+#### Toast Positioning
+
+| Variable              | Default | Used For                      |
+| --------------------- | ------- | ----------------------------- |
+| `--fec-toast-inset-x` | `1rem`  | Horizontal distance from edge |
+| `--fec-toast-inset-y` | `3rem`  | Vertical distance from edge   |
+
+---
+
+#### Dialog Sizing
+
+| Variable         | Default                     |
+| ---------------- | --------------------------- |
+| `--fec-dialog-w` | `clamp(300px, 60vw, 400px)` |
+| `--fec-dialog-h` | `clamp(200px, 60vh, 300px)` |
+
+---
+
+#### Modal Sizing
+
+| Variable        | Default                     |
+| --------------- | --------------------------- |
+| `--fec-modal-w` | `clamp(320px, 80vw, 720px)` |
+| `--fec-modal-h` | `clamp(240px, 80vh, 560px)` |
+
+---
+
 ### One-off overrides
 
 Override a single part of a component without needing to rewrite the full default styling:
@@ -139,7 +230,7 @@ import { ToastProvider } from "@fraserelliott/fe-components";
 
 <ToastProvider>
   <App />
-</ToastProvider>
+</ToastProvider>;
 ```
 
 2. Render the display (often in a portal):
