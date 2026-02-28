@@ -311,6 +311,100 @@ export function Example() {
 
 ---
 
+## Modal
+
+A flexible container component for rendering custom modal content.
+
+Unlike `ConfirmDialog`, `Modal` is unopinionated and simply renders children inside an overlay panel. It is designed to be:
+
+- composable
+- predictable
+- neutral by default
+- easy to restyle via `style` overrides
+
+### Features
+
+- Controlled open state via `open` + `onOpenChange`
+- Optional backdrop click closing
+- Optional Escape key closing
+- Optional persistent mounting via `keepMounted`
+- Fully custom content via `children`
+
+---
+
+### Props
+
+| Prop                   | Type                        | Default     | Description                            |
+| ---------------------- | --------------------------- | ----------- | -------------------------------------- |
+| `open`                 | `boolean`                   | —           | Controls whether the modal is visible  |
+| `onOpenChange`         | `(isOpen: boolean) => void` | —           | Called when modal requests to close    |
+| `heading`              | `string`                    | `undefined` | Optional heading text                  |
+| `closeOnEscape`        | `boolean`                   | `true`      | Closes modal when Escape is pressed    |
+| `closeOnBackdropClick` | `boolean`                   | `true`      | Closes modal when clicking the overlay |
+| `keepMounted`          | `boolean`                   | `false`     | Keeps modal mounted when closed        |
+| `style`                | `object`                    | —           | Optional style override object         |
+| `children`             | `ReactNode`                 | —           | Custom modal content                   |
+
+---
+
+### Example
+
+```jsx
+import { Modal, OptionalPortal } from "@fraserelliott/fe-components";
+import { useState } from "react";
+
+export function Example() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setOpen(true)}>Open Modal</button>
+
+      <OptionalPortal portalTarget={document.body}>
+        <Modal
+          open={open}
+          onOpenChange={setOpen}
+          heading="Modal Demo"
+          closeOnEscape
+          closeOnBackdropClick
+        >
+          <p>This content is fully custom.</p>
+          <input placeholder="Focusable input" />
+        </Modal>
+      </OptionalPortal>
+    </>
+  );
+}
+```
+
+---
+
+### Behaviour Notes
+
+- Clicking inside the panel will not close the modal.
+- Backdrop clicks only close when `closeOnBackdropClick` is `true`.
+- Escape only closes when `closeOnEscape` is `true`.
+- `keepMounted` prevents unmounting when closed (useful for preserving internal state).
+
+---
+
+### When to Use
+
+Use `Modal` when you need:
+
+- fully custom layouts
+- forms inside a dialog
+- multi-step flows
+- reusable modal shells
+
+Use `ConfirmDialog` when you need:
+
+- structured confirm/cancel behaviour
+- consistent confirmation flows
+- built-in intent handling
+
+---
+
 ## Reporting issues
 
 If something doesn’t work as expected, please open an issue with:
