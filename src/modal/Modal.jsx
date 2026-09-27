@@ -10,6 +10,7 @@ export function Modal({
   style,
   keepMounted,
   children,
+  removeCloseButton,
   closeOnEscape = true,
   closeOnBackdropClick = true,
 }) {
@@ -65,14 +66,16 @@ export function Modal({
           <div className="fec-modal-body-inner">{children}</div>
         </div>
 
-        <div className="fe-d-flex fe-justify-center">
-          <button
-            className={mergedStyle.BtnPrimary()}
-            onClick={() => onOpenChange?.(false)}
-          >
-            Close
-          </button>
-        </div>
+        {!removeCloseButton && (
+          <div className="fe-d-flex fe-justify-center">
+            <button
+              className={mergedStyle.BtnPrimary()}
+              onClick={() => onOpenChange?.(false)}
+            >
+              Close
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

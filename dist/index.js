@@ -104,19 +104,19 @@ var DefaultStyle = {
   BtnConfirm: (...extra) => cx(FEPresets.Btn, "fec-bg-confirm fec-btn fe-pressable", ...extra),
   Heading: (...extra) => cx("fe-fw-bold", ...extra),
   Overlay: (...extra) => cx(
-    "fe-pos-fixed fe-d-flex fe-justify-center fe-items-center fec-z-top fec-overlay",
+    "fe-pos-fixed fe-d-flex fe-justify-center fe-items-center fec-z-modal fec-overlay",
     ...extra
   )
 };
 
 // src/styles/toastDefaults.js
 import { cx as cx2 } from "@fraserelliott/fe-utilities/cx";
-var neutralToast = "fe-d-flex fe-justify-center fe-items-center fec-opacity-80 fec-z-top fec-opacity-ease-out fec-toast";
+var neutralToast = "fe-d-flex fe-justify-center fe-items-center fec-opacity-80 fec-z-toast fec-opacity-ease-out fec-toast";
 var ToastDefaultStyle = {
   Panel: (...extra) => cx2(DefaultStyle.Panel, neutralToast, ...extra),
   Success: (...extra) => cx2(DefaultStyle.Panel, neutralToast, "fec-bg-confirm", ...extra),
   Error: (...extra) => cx2(DefaultStyle.Panel, neutralToast, "fec-bg-danger", ...extra),
-  StackingContainer: (...extra) => cx2("fe-d-flex fe-gap-1 fec-toast-container", ...extra),
+  StackingContainer: (...extra) => cx2("fe-d-flex fe-gap-1 fec-toast-container fec-z-toast", ...extra),
   Fading: (...extra) => cx2("fec-opacity-0", ...extra)
 };
 
@@ -199,7 +199,7 @@ import { cx as cx5 } from "@fraserelliott/fe-utilities/cx";
 var ConfirmDialogDefaultStyle = {
   Panel: (...extra) => cx5(
     DefaultStyle.Panel,
-    "fe-d-flex fe-flex-column fe-justify-center fe-items-center fec-z-top fec-confirm-dialog fe-p-em-3",
+    "fe-d-flex fe-flex-column fe-justify-center fe-items-center fec-z-modal fec-confirm-dialog fe-p-em-3",
     ...extra
   ),
   BtnConfirm: DefaultStyle.BtnConfirm,
@@ -295,7 +295,7 @@ import { cx as cx6 } from "@fraserelliott/fe-utilities/cx";
 var ModalDefaultStyle = {
   Panel: (...extra) => cx6(
     DefaultStyle.Panel,
-    "fe-d-flex fe-flex-column fe-justify-center fec-z-top fec-modal fe-p-em-3",
+    "fe-d-flex fe-flex-column fe-justify-center fec-z-modal fec-modal fe-p-em-3",
     ...extra
   ),
   BtnPrimary: DefaultStyle.BtnPrimary,
@@ -313,6 +313,7 @@ function Modal({
   style,
   keepMounted,
   children,
+  removeCloseButton,
   closeOnEscape = true,
   closeOnBackdropClick = true
 }) {
@@ -359,7 +360,7 @@ function Modal({
           )
         ] }),
         /* @__PURE__ */ jsx4("div", { className: "fec-modal-body", children: /* @__PURE__ */ jsx4("div", { className: "fec-modal-body-inner", children }) }),
-        /* @__PURE__ */ jsx4("div", { className: "fe-d-flex fe-justify-center", children: /* @__PURE__ */ jsx4(
+        !removeCloseButton && /* @__PURE__ */ jsx4("div", { className: "fe-d-flex fe-justify-center", children: /* @__PURE__ */ jsx4(
           "button",
           {
             className: mergedStyle.BtnPrimary(),

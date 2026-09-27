@@ -75,8 +75,12 @@
   opacity: 0;
 }
 
-.fec-z-top {
-  z-index: 1100;
+.fec-z-modal {
+  z-index: var(--fec-modal-z-index, 1100);
+}
+
+.fec-z-toast {
+  z-index: var(--fec-toast-z-index, 1200);
 }
 
 .fec-opacity-ease-out {

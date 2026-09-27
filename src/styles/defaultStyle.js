@@ -16,7 +16,7 @@ export const DefaultStyle = {
   Heading: (...extra) => cx("fe-fw-bold", ...extra),
   Overlay: (...extra) =>
     cx(
-      "fe-pos-fixed fe-d-flex fe-justify-center fe-items-center fec-z-top fec-overlay",
+      "fe-pos-fixed fe-d-flex fe-justify-center fe-items-center fec-z-modal fec-overlay",
       ...extra,
     ),
 };
