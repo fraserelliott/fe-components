@@ -11,7 +11,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-    "@fraserelliott/fe-components": "file:../fe-components.tgz",
+    "@fraserelliott/fe-components": "^0.2.6",
     "@fraserelliott/fe-utilities": "^0.3.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
