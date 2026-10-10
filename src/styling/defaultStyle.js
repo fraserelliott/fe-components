@@ -6,7 +6,7 @@ import {
   FEPresetsClasses,
 } from "@fraserelliott/fe-utilities";
 
-export const styles = {
+const styles = {
   BgPrimary: {
     backgroundColor: "var(--fec-bg-primary, #f6f6f3)",
   },
