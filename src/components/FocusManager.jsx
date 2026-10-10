@@ -6,7 +6,7 @@ import {
   useCallback,
 } from "react";
 
-const FocusManagerContext = createContext(null);
+const FocusManagerContext = createContext(undefined);
 
 const focusableSelector = [
   "a[href]",
@@ -23,6 +23,13 @@ export function FocusManagerProvider({ children }) {
   const getTopmost = useCallback(() => {
     return stack.current.at(-1);
   }, []);
+
+  const isTopmost = useCallback(
+    (element) => {
+      return getTopmost()?.element === element;
+    },
+    [getTopmost],
+  );
 
   const trapComponent = useCallback((element) => {
     if (!element) return;
@@ -114,12 +121,20 @@ export function FocusManagerProvider({ children }) {
   }, [getTopmost]);
 
   return (
-    <FocusManagerContext.Provider value={{ trapComponent, untrapComponent }}>
+    <FocusManagerContext.Provider
+      value={{ trapComponent, untrapComponent, isTopmost }}
+    >
       {children}
     </FocusManagerContext.Provider>
   );
 }
 
 export function useFocusManager() {
-  return useContext(FocusManagerContext);
+  const ctx = useContext(FocusManagerContext);
+  if (ctx === undefined) {
+    throw new Error(
+      "useFocusManager must be used within a FocusManagerProvider",
+    );
+  }
+  return ctx;
 }

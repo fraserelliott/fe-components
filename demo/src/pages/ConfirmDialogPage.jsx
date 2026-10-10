@@ -60,6 +60,10 @@ export function ConfirmDialogPage() {
           onError={onError}
           heading="Confirm Dialog Demo"
           text="Select option to add to log."
+          cancelLabel="NO!"
+          confirmLabel="Okay then"
+          closeOnEscape
+          overlay={true}
         />
       </OptionalPortal>
     </div>

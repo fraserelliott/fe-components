@@ -68,9 +68,25 @@ const styles = {
   },
 };
 
+const overlayBase = sx(
+  utilities["fe-pos-fixed"],
+  utilities["fe-d-flex"],
+  utilities["fe-justify-center"],
+  utilities["fe-items-center"],
+  {
+    inset: 0,
+    width: "100%",
+    height: "100%",
+    zIndex: "var(--fec-z-overlay, 100)",
+  },
+);
+
 export const defaultStyles = {
   inline: {
     Panel: sx(
+      utilities["fe-d-flex"],
+      utilities["fe-flex-column"],
+      utilities["fe-p-em-3"],
       utilities["fe-rounded-2"],
       utilities["fe-p-em-2"],
       styles.BgPanel,
@@ -78,32 +94,17 @@ export const defaultStyles = {
       styles.Border,
       styles.ShadowSoft,
     ),
-
     Btn: sx(FEPresetsInline.Btn),
-
     BtnPrimary: sx(FEPresetsInline.Btn),
-
     BtnDanger: sx(FEPresetsInline.Btn, styles.BgDanger),
-
     BtnConfirm: sx(FEPresetsInline.Btn, styles.BgConfirm),
-
     Heading: sx(utilities["fe-fw-bold"]),
-  },
-
-  classes: {
-    Panel: cx(
-      "fe-rounded-2 fe-p-em-2 fec-bg-panel fec-text-primary fec-border fec-shadow-soft",
-    ),
-
-    Btn: cx(FEPresetsClasses.Btn),
-
-    BtnPrimary: cx(FEPresetsClasses.Btn),
-
-    BtnDanger: cx(FEPresetsClasses.Btn, "fec-bg-danger"),
-
-    BtnConfirm: cx(FEPresetsClasses.Btn, "fec-bg-confirm"),
-
-    Heading: "fe-fw-bold",
+    BlurOverlay: sx(overlayBase, {
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      backdropFilter: "blur(4px)",
+    }),
+    Overlay: overlayBase,
+    TextPrimary: styles.TextPrimary,
   },
 
   anim: {
@@ -115,17 +116,9 @@ export const defaultStyles = {
     },
 
     noAnim: {
-      inline: {
-        BtnPrimary: styles.BtnPrimary,
-        BtnDanger: styles.BgDanger,
-        BtnConfirm: styles.BgConfirm,
-      },
-
-      classes: {
-        BtnPrimary: "fec-btn-primary-static",
-        BtnDanger: "fec-bg-danger",
-        BtnConfirm: "fec-bg-confirm",
-      },
+      BtnPrimary: styles.BtnPrimary,
+      BtnDanger: styles.BgDanger,
+      BtnConfirm: styles.BgConfirm,
     },
   },
 };

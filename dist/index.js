@@ -1,236 +1,392 @@
-// src/toast/ToastProvider.jsx
+// src/styling/defaultStyle.js
 import {
-  createContext,
-  useState,
-  useCallback,
-  useMemo,
-  useRef,
-  useEffect,
-  useContext
-} from "react";
-import { v4 as uuid } from "uuid";
+  utilities,
+  sx,
+  cx,
+  FEPresetsInline,
+  FEPresetsClasses
+} from "@fraserelliott/fe-utilities";
+var styles = {
+  BgPrimary: {
+    backgroundColor: "var(--fec-bg-primary, #f6f6f3)"
+  },
+  BgSecondary: {
+    backgroundColor: "var(--fec-bg-secondary, #ecece7)"
+  },
+  BgActive: {
+    backgroundColor: "var(--fec-bg-active, #cfd8e3)"
+  },
+  BtnPrimary: {
+    backgroundColor: "var(--fec-btn-primary, #f6f6f3)"
+  },
+  BgPanel: {
+    backgroundColor: "var(--fec-bg-panel, #ffffff)"
+  },
+  TextPrimary: {
+    color: "var(--fec-text-primary, #1f1f1f)"
+  },
+  TextSecondary: {
+    color: "var(--fec-text-secondary, #5a5a5a)"
+  },
+  BgConfirm: {
+    backgroundColor: "var(--fec-confirm, #4caf50)"
+  },
+  TextConfirm: {
+    color: "var(--fec-confirm, #4caf50)"
+  },
+  BgDanger: {
+    backgroundColor: "var(--fec-danger, #d9534f)"
+  },
+  TextDanger: {
+    color: "var(--fec-danger, #d9534f)"
+  },
+  Border: {
+    borderWidth: "var(--fec-border-width, 1px)",
+    borderStyle: "var(--fec-border-style, solid)",
+    borderColor: "var(--fec-border-color, #d6d6d0)"
+  },
+  ShadowSoft: {
+    boxShadow: "var(--fec-shadow-soft, 0 1px 2px rgba(0, 0, 0, 0.05), 0 3px 6px rgba(0, 0, 0, 0.06))"
+  },
+  ShadowMedium: {
+    boxShadow: "var(--fec-shadow-medium, 0 4px 8px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.06))"
+  }
+};
+var overlayBase = sx(
+  utilities["fe-pos-fixed"],
+  utilities["fe-d-flex"],
+  utilities["fe-justify-center"],
+  utilities["fe-items-center"],
+  {
+    inset: 0,
+    width: "100%",
+    height: "100%",
+    zIndex: "var(--fec-z-overlay, 100)"
+  }
+);
+var defaultStyles = {
+  inline: {
+    Panel: sx(
+      utilities["fe-d-flex"],
+      utilities["fe-flex-column"],
+      utilities["fe-p-em-3"],
+      utilities["fe-rounded-2"],
+      utilities["fe-p-em-2"],
+      styles.BgPanel,
+      styles.TextPrimary,
+      styles.Border,
+      styles.ShadowSoft
+    ),
+    Btn: sx(FEPresetsInline.Btn),
+    BtnPrimary: sx(FEPresetsInline.Btn),
+    BtnDanger: sx(FEPresetsInline.Btn, styles.BgDanger),
+    BtnConfirm: sx(FEPresetsInline.Btn, styles.BgConfirm),
+    Heading: sx(utilities["fe-fw-bold"]),
+    BlurOverlay: sx(overlayBase, {
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      backdropFilter: "blur(4px)"
+    }),
+    Overlay: overlayBase,
+    TextPrimary: styles.TextPrimary
+  },
+  anim: {
+    anim: {
+      Btn: "fec-btn fe-pressable",
+      BtnPrimary: "fec-btn fec-btn-primary fe-pressable",
+      BtnConfirm: "fec-btn fec-btn-confirm fe-pressable",
+      BtnDanger: "fec-btn fec-btn-danger fe-pressable"
+    },
+    noAnim: {
+      BtnPrimary: styles.BtnPrimary,
+      BtnDanger: styles.BgDanger,
+      BtnConfirm: styles.BgConfirm
+    }
+  }
+};
+
+// src/styling/FEStyle.jsx
+import { createContext, useContext } from "react";
+import { feStyle } from "@fraserelliott/fe-utilities";
 import { jsx } from "react/jsx-runtime";
-var ToastContext = createContext();
-function ToastProvider({
-  children,
-  fadeMs = 150,
-  defaultDelayMs = 2350
-}) {
-  const [toastMessages, setToastMessages] = useState([]);
-  const fadeStartTimersRef = useRef(/* @__PURE__ */ new Map());
-  const removeTimersRef = useRef(/* @__PURE__ */ new Map());
-  useEffect(() => {
-    return () => {
-      for (const t of fadeStartTimersRef.current.values())
-        window.clearTimeout(t);
-      for (const t of removeTimersRef.current.values()) window.clearTimeout(t);
-      fadeStartTimersRef.current.clear();
-      removeTimersRef.current.clear();
-    };
-  }, []);
-  const clearTimersFor = useCallback((id) => {
-    const fadeStartTimer = fadeStartTimersRef.current.get(id);
-    if (fadeStartTimer != null) {
-      window.clearTimeout(fadeStartTimer);
-      fadeStartTimersRef.current.delete(id);
-    }
-    const removeTimer = removeTimersRef.current.get(id);
-    if (removeTimer != null) {
-      window.clearTimeout(removeTimer);
-      removeTimersRef.current.delete(id);
-    }
-  }, []);
-  const startFadeAndScheduleRemove = useCallback(
-    (id) => {
-      setToastMessages(
-        (prev) => prev.map((msg) => msg.id === id ? { ...msg, fading: true } : msg)
-      );
-      clearTimersFor(id);
-      const removeTimer = window.setTimeout(() => {
-        setToastMessages((prev) => prev.filter((msg) => msg.id !== id));
-        removeTimersRef.current.delete(id);
-      }, fadeMs);
-      removeTimersRef.current.set(id, removeTimer);
-    },
-    [fadeMs, clearTimersFor]
-  );
-  const dismissToast = useCallback(
-    (id) => {
-      startFadeAndScheduleRemove(id);
-    },
-    [startFadeAndScheduleRemove]
-  );
-  const addToastMessage = useCallback(
-    (message, type, delayMs = defaultDelayMs) => {
-      const id = uuid();
-      setToastMessages((prev) => [
-        ...prev,
-        { id, message, type, fading: false }
-      ]);
-      clearTimersFor(id);
-      const fadeStartTimer = window.setTimeout(() => {
-        startFadeAndScheduleRemove(id);
-        fadeStartTimersRef.current.delete(id);
-      }, delayMs);
-      fadeStartTimersRef.current.set(id, fadeStartTimer);
-      return id;
-    },
-    [defaultDelayMs, clearTimersFor, startFadeAndScheduleRemove]
-  );
-  const value = useMemo(
-    () => ({ toastMessages, addToastMessage, dismissToast }),
-    [toastMessages, addToastMessage, dismissToast]
-  );
-  return /* @__PURE__ */ jsx(ToastContext.Provider, { value, children });
+var FEStyleContext = createContext({
+  theme: {}
+});
+function FEStyleProvider({ theme = {}, children }) {
+  return /* @__PURE__ */ jsx(FEStyleContext.Provider, { value: { theme }, children });
 }
-function useToast() {
-  const ctx = useContext(ToastContext);
+function useFEStyles(defaultStyles2 = {}, baseStyle = {}, baseClassName = {}, noAnim = false) {
+  const { theme } = useContext(FEStyleContext);
+  const styleComponent = (slot, style = {}, className = "") => {
+    var _a, _b, _c, _d, _e, _f, _g;
+    const styles2 = [];
+    const classes = [];
+    styles2.push((_a = defaultStyles2.inline) == null ? void 0 : _a[slot]);
+    if (noAnim) {
+      styles2.push((_c = (_b = defaultStyles2.anim) == null ? void 0 : _b.noAnim) == null ? void 0 : _c[slot]);
+    } else {
+      classes.push((_e = (_d = defaultStyles2.anim) == null ? void 0 : _d.anim) == null ? void 0 : _e[slot]);
+    }
+    styles2.push((_f = theme == null ? void 0 : theme.inline) == null ? void 0 : _f[slot], baseStyle == null ? void 0 : baseStyle[slot], style);
+    classes.push((_g = theme == null ? void 0 : theme.classes) == null ? void 0 : _g[slot], baseClassName == null ? void 0 : baseClassName[slot], className);
+    return feStyle(styles2, classes);
+  };
+  return { styleComponent };
+}
+
+// src/components/OptionalPortal.jsx
+import { createPortal } from "react-dom";
+function OptionalPortal({ children, portalTarget }) {
+  if (!portalTarget) return children;
+  const target = portalTarget === true ? typeof document !== "undefined" ? document.body : null : portalTarget;
+  if (!target) return children;
+  return createPortal(children, target);
+}
+
+// src/components/FocusManager.jsx
+import {
+  createContext as createContext2,
+  useContext as useContext2,
+  useEffect,
+  useRef,
+  useCallback
+} from "react";
+import { jsx as jsx2 } from "react/jsx-runtime";
+var FocusManagerContext = createContext2(void 0);
+var focusableSelector = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[tabindex]:not([tabindex='-1'])"
+].join(", ");
+function FocusManagerProvider({ children }) {
+  const stack = useRef([]);
+  const getTopmost = useCallback(() => {
+    return stack.current.at(-1);
+  }, []);
+  const isTopmost = useCallback(
+    (element) => {
+      var _a;
+      return ((_a = getTopmost()) == null ? void 0 : _a.element) === element;
+    },
+    [getTopmost]
+  );
+  const trapComponent = useCallback((element) => {
+    if (!element) return;
+    if (stack.current.some((entry) => entry.element === element)) {
+      return;
+    }
+    const previousFocus = document.activeElement;
+    stack.current.push({ element, previousFocus });
+    const first = element.querySelector(focusableSelector);
+    (first ?? element).focus();
+  }, []);
+  const untrapComponent = useCallback((element) => {
+    var _a;
+    const index = stack.current.findIndex((entry2) => entry2.element === element);
+    if (index === -1) return;
+    const [entry] = stack.current.splice(index, 1);
+    if (index === stack.current.length) {
+      if ((_a = entry.previousFocus) == null ? void 0 : _a.isConnected) {
+        entry.previousFocus.focus();
+      }
+    }
+  }, []);
+  useEffect(() => {
+    function getFocusable(element) {
+      return [...element.querySelectorAll(focusableSelector)].filter(
+        (el) => el.getClientRects().length > 0 && !el.closest("[inert]")
+      );
+    }
+    function handleKeyDown(event) {
+      if (event.key !== "Tab") return;
+      const topmost = getTopmost();
+      if (!topmost) return;
+      const { element } = topmost;
+      const focusable = getFocusable(element);
+      if (!focusable.length) {
+        event.preventDefault();
+        element.focus();
+        return;
+      }
+      const first = focusable[0];
+      const last = focusable.at(-1);
+      const active = document.activeElement;
+      if (event.shiftKey) {
+        if (active === first || !element.contains(active)) {
+          event.preventDefault();
+          last.focus();
+        }
+      } else if (active === last || !element.contains(active)) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+    function handleFocusIn(event) {
+      const topmost = getTopmost();
+      if (!topmost) return;
+      const { element } = topmost;
+      if (!element.contains(event.target)) {
+        const first = getFocusable(element)[0];
+        (first ?? element).focus();
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("focusin", handleFocusIn);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("focusin", handleFocusIn);
+    };
+  }, [getTopmost]);
+  return /* @__PURE__ */ jsx2(
+    FocusManagerContext.Provider,
+    {
+      value: { trapComponent, untrapComponent, isTopmost },
+      children
+    }
+  );
+}
+function useFocusManager() {
+  const ctx = useContext2(FocusManagerContext);
   if (ctx === void 0) {
-    throw new Error("useToast must be used within a ToastProvider");
+    throw new Error(
+      "useFocusManager must be used within a FocusManagerProvider"
+    );
   }
   return ctx;
 }
 
-// src/styles/defaultStyle.js
-import { cx, FEPresets } from "@fraserelliott/fe-utilities";
-var DefaultStyle = {
-  Panel: (...extra) => cx(
-    "fe-rounded-2 fe-p-em-2 fec-bg-panel fec-text-primary fec-border fec-shadow-soft",
-    ...extra
-  ),
-  Btn: (...extra) => cx(FEPresets.Btn, "fec-btn fe-pressable", ...extra),
-  BtnPrimary: (...extra) => cx(FEPresets.Btn, "fec-btn-primary fec-btn fe-pressable", ...extra),
-  BtnDanger: (...extra) => cx(FEPresets.Btn, "fec-bg-danger fec-btn fe-pressable", ...extra),
-  BtnConfirm: (...extra) => cx(FEPresets.Btn, "fec-bg-confirm fec-btn fe-pressable", ...extra),
-  Heading: (...extra) => cx("fe-fw-bold", ...extra),
-  Overlay: (...extra) => cx(
-    "fe-pos-fixed fe-d-flex fe-justify-center fe-items-center fec-z-modal fec-overlay",
-    ...extra
-  )
-};
-
-// src/styles/toastDefaults.js
-import { cx as cx2 } from "@fraserelliott/fe-utilities/cx";
-var neutralToast = "fe-d-flex fe-justify-center fe-items-center fec-opacity-80 fec-z-toast fec-opacity-ease-out fec-toast";
-var ToastDefaultStyle = {
-  Panel: (...extra) => cx2(DefaultStyle.Panel, neutralToast, ...extra),
-  Success: (...extra) => cx2(DefaultStyle.Panel, neutralToast, "fec-bg-confirm", ...extra),
-  Error: (...extra) => cx2(DefaultStyle.Panel, neutralToast, "fec-bg-danger", ...extra),
-  StackingContainer: (...extra) => cx2("fe-d-flex fe-gap-1 fec-toast-container fec-z-toast", ...extra),
-  Fading: (...extra) => cx2("fec-opacity-0", ...extra)
-};
-
-// src/toast/ToastMessageDisplay.jsx
-import { cx as cx4 } from "@fraserelliott/fe-utilities";
-
-// src/util/styleUtil.js
-import { cx as cx3 } from "@fraserelliott/fe-utilities";
-function mergeStyle(defaultStyle, userStyle, styleName) {
-  const style = {};
-  for (const key of Object.keys(defaultStyle)) {
-    style[key] = (...extra) => cx3(defaultStyle[key], userStyle[key], ...extra);
-    if (process.env.NODE_ENV !== "production") {
-      for (const key2 of Object.keys(userStyle)) {
-        if (!(key2 in defaultStyle)) {
-          console.warn(`[${styleName}] Unknown style slot: "${key2}"`);
-        }
-      }
-    }
+// src/components/FloatingPanel/floatingpanelDefaultStyle.js
+import { cx as cx2, sx as sx2, utilities as utilities2 } from "@fraserelliott/fe-utilities";
+var floatingPanelDefaultStyle = {
+  inline: {
+    Panel: sx2(defaultStyles.inline.Panel, utilities2["fe-pos-absolute"], {
+      zIndex: "var(--fec-z-floating-panel, 50)"
+    }),
+    BlurOverlay: defaultStyles.inline.BlurOverlay,
+    Overlay: defaultStyles.inline.Overlay
   }
-  return style;
-}
-
-// src/toast/ToastMessageDisplay.jsx
-import { jsx as jsx2 } from "react/jsx-runtime";
-var validDirections = /* @__PURE__ */ new Set([
-  "row",
-  "row-reverse",
-  "column",
-  "column-reverse"
-]);
-var positionClassMap = {
-  "bottom-right": "fec-toast-pos-br",
-  "bottom-left": "fec-toast-pos-bl",
-  "top-right": "fec-toast-pos-tr",
-  "top-left": "fec-toast-pos-tl"
 };
-function ToastMessageDisplay({
-  style: userStyle = {},
-  direction = "column-reverse",
-  position = "bottom-right",
-  clearOnClick = false
+
+// src/components/FloatingPanel/FloatingPanel.jsx
+import { useRef as useRef2, useEffect as useEffect2 } from "react";
+import { jsx as jsx3 } from "react/jsx-runtime";
+function FloatingPanel({
+  open,
+  style,
+  className,
+  overlay = false,
+  trapFocus = false,
+  children,
+  closeOnEscape = false,
+  closeOnOverlayClick = false,
+  onOpenChange
 }) {
-  const { toastMessages, dismissToast } = useToast();
-  const resolvedDirection = validDirections.has(direction) ? direction : "column-reverse";
-  const resolvedPosition = positionClassMap[position] ?? positionClassMap["bottom-right"];
-  const mergedStyle = mergeStyle(
-    ToastDefaultStyle,
-    userStyle,
-    "ToastDefaultStyle"
+  const { styleComponent } = useFEStyles(
+    floatingPanelDefaultStyle,
+    style,
+    className
   );
-  const calculateStyle = (toast) => {
-    const base = toast.type === "success" ? mergedStyle.Success : toast.type === "error" ? mergedStyle.Error : mergedStyle.Panel;
-    return cx4(base, toast.fading && mergedStyle.Fading);
-  };
-  return /* @__PURE__ */ jsx2(
+  if (!open) return null;
+  const panel = /* @__PURE__ */ jsx3(
+    FloatingPanelInner,
+    {
+      open,
+      style,
+      className,
+      trapFocus,
+      closeOnEscape,
+      onOpenChange,
+      children
+    }
+  );
+  if (!overlay) return panel;
+  return /* @__PURE__ */ jsx3(
     "div",
     {
-      className: mergedStyle.StackingContainer(resolvedPosition),
-      style: { flexDirection: resolvedDirection },
-      children: toastMessages.map((toast) => {
-        return /* @__PURE__ */ jsx2(
-          "p",
-          {
-            className: calculateStyle(toast),
-            onClick: () => clearOnClick && dismissToast(toast.id),
-            role: "button",
-            tabIndex: 0,
-            children: toast.message
-          },
-          toast.id
-        );
-      })
+      ...styleComponent(overlay === "blur" ? "BlurOverlay" : "Overlay"),
+      onClick: (e) => {
+        if (closeOnOverlayClick && e.target === e.currentTarget)
+          onOpenChange == null ? void 0 : onOpenChange(false);
+      },
+      children: panel
+    }
+  );
+}
+function FloatingPanelInner({
+  open,
+  style,
+  className,
+  children,
+  trapFocus = false,
+  closeOnEscape,
+  onOpenChange
+}) {
+  const { styleComponent } = useFEStyles(
+    floatingPanelDefaultStyle,
+    style,
+    className
+  );
+  const { trapComponent, untrapComponent, isTopmost } = useFocusManager();
+  const panelRef = useRef2(null);
+  useEffect2(() => {
+    if (!open || !closeOnEscape || !trapFocus) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape" && isTopmost(panelRef.current)) {
+        onOpenChange == null ? void 0 : onOpenChange(false);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open, closeOnEscape, trapFocus, isTopmost, onOpenChange]);
+  useEffect2(() => {
+    if (!open || !trapFocus) return;
+    const element = panelRef.current;
+    if (!element) return;
+    trapComponent(element);
+    return () => untrapComponent(element);
+  }, [open, trapFocus, trapComponent, untrapComponent]);
+  return /* @__PURE__ */ jsx3(
+    "div",
+    {
+      ref: panelRef,
+      tabIndex: trapFocus ? -1 : void 0,
+      ...styleComponent("Panel"),
+      children
     }
   );
 }
 
-// src/styles/confirmDialogDefaults.js
-import { cx as cx5 } from "@fraserelliott/fe-utilities/cx";
-var ConfirmDialogDefaultStyle = {
-  Panel: (...extra) => cx5(
-    DefaultStyle.Panel,
-    "fe-d-flex fe-flex-column fe-justify-center fe-items-center fec-z-modal fec-confirm-dialog fe-p-em-3",
-    ...extra
-  ),
-  BtnConfirm: DefaultStyle.BtnConfirm,
-  BtnDanger: DefaultStyle.BtnDanger,
-  Heading: DefaultStyle.Heading,
-  ContainerBtn: (...extra) => cx5("fe-d-flex fe-justify-around fe-w-100", ...extra),
-  Overlay: DefaultStyle.Overlay
-};
-
-// src/confirmdialog/ConfirmDialog.jsx
-import { useState as useState2 } from "react";
-import { jsx as jsx3, jsxs } from "react/jsx-runtime";
+// src/components/ConfirmDialog.jsx
+import { sx as sx3, utilities as utilities3 } from "@fraserelliott/fe-utilities";
+import { useState } from "react";
+import { jsx as jsx4, jsxs } from "react/jsx-runtime";
 function ConfirmDialog({
   open,
+  style = {},
+  className = {},
+  overlay = "blur",
+  trapFocus = true,
+  noAnim = false,
+  cancelLabel = "Cancel",
+  confirmLabel = "Confirm",
+  heading,
+  text,
   onConfirm,
   onCancel,
   onOpenChange,
-  heading,
-  text,
-  onError,
-  style,
-  keepMounted
+  closeOnEscape
 }) {
-  if (!open && !keepMounted) return null;
-  const [pending, setPending] = useState2(false);
-  const userStyle = style ?? {};
-  const mergedStyle = mergeStyle(
-    ConfirmDialogDefaultStyle,
-    userStyle,
-    "ConfirmDialogDefaultStyle"
+  const { styleComponent } = useFEStyles(
+    defaultStyles,
+    style,
+    className,
+    noAnim
   );
+  const [pending, setPending] = useState(false);
   const handleCancel = async () => {
     try {
       setPending(true);
@@ -253,135 +409,67 @@ function ConfirmDialog({
       onError == null ? void 0 : onError({ source: "confirm", err });
     }
   };
-  return /* @__PURE__ */ jsx3("div", { className: mergedStyle.Overlay(), children: /* @__PURE__ */ jsxs("div", { className: mergedStyle.Panel(), children: [
-    heading !== void 0 && /* @__PURE__ */ jsx3("h1", { className: mergedStyle.Heading(), children: heading }),
-    text !== void 0 && /* @__PURE__ */ jsx3("p", { className: "fe-grow-1", children: text }),
-    /* @__PURE__ */ jsxs("div", { className: mergedStyle.ContainerBtn(), children: [
-      /* @__PURE__ */ jsx3(
-        "button",
-        {
-          onClick: () => handleCancel(),
-          className: mergedStyle.BtnDanger(),
-          disabled: pending,
-          "aria-busy": pending,
-          children: "Cancel"
-        }
-      ),
-      /* @__PURE__ */ jsx3(
-        "button",
-        {
-          onClick: () => handleConfirm(),
-          className: mergedStyle.BtnConfirm(),
-          disabled: pending,
-          "aria-busy": pending,
-          children: pending ? "Working..." : "Confirm"
-        }
-      )
-    ] })
-  ] }) });
-}
-
-// src/optionalportal/OptionalPortal.jsx
-import { createPortal } from "react-dom";
-function OptionalPortal({ children, portalTarget }) {
-  if (!portalTarget) return children;
-  const target = portalTarget === true ? typeof document !== "undefined" ? document.body : null : portalTarget;
-  if (!target) return children;
-  return createPortal(children, target);
-}
-
-// src/styles/modalDefaults.js
-import { cx as cx6 } from "@fraserelliott/fe-utilities/cx";
-var ModalDefaultStyle = {
-  Panel: (...extra) => cx6(
-    DefaultStyle.Panel,
-    "fe-d-flex fe-flex-column fe-justify-center fec-z-modal fec-modal fe-p-em-3",
-    ...extra
-  ),
-  BtnPrimary: DefaultStyle.BtnPrimary,
-  Overlay: DefaultStyle.Overlay,
-  Heading: (...extra) => cx6("fe-fw-bold", ...extra)
-};
-
-// src/modal/Modal.jsx
-import { useEffect as useEffect2 } from "react";
-import { jsx as jsx4, jsxs as jsxs2 } from "react/jsx-runtime";
-function Modal({
-  open,
-  onOpenChange,
-  heading,
-  style,
-  keepMounted,
-  children,
-  removeCloseButton,
-  closeOnEscape = true,
-  closeOnBackdropClick = true
-}) {
-  const userStyle = style ?? {};
-  const mergedStyle = mergeStyle(
-    ModalDefaultStyle,
-    userStyle,
-    "ModalDefaultStyle"
-  );
-  useEffect2(() => {
-    if (!open || !closeOnEscape) return;
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
-        onOpenChange == null ? void 0 : onOpenChange(false);
-      }
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [open, closeOnEscape, onOpenChange]);
-  if (!open && !keepMounted) return null;
-  return /* @__PURE__ */ jsx4(
-    "div",
+  const overrides = {
+    Overlay: { zIndex: "var(--fec-z-dialog, 200)" },
+    BlurOverlay: { zIndex: "var(--fec-z-dialog, 200)" },
+    Panel: utilities3["fe-gap-3"]
+  };
+  return /* @__PURE__ */ jsxs(
+    FloatingPanel,
     {
-      className: mergedStyle.Overlay(),
-      onClick: (e) => {
-        if (!closeOnBackdropClick) return;
-        if (e.target === e.currentTarget) {
-          onOpenChange == null ? void 0 : onOpenChange(false);
-        }
-      },
-      children: /* @__PURE__ */ jsxs2("div", { className: mergedStyle.Panel(), children: [
-        /* @__PURE__ */ jsxs2("div", { className: "fe-d-flex fe-justify-between fe-w-100", children: [
-          /* @__PURE__ */ jsx4("div", {}),
-          heading !== void 0 && /* @__PURE__ */ jsx4("h1", { className: mergedStyle.Heading(), children: heading }),
-          /* @__PURE__ */ jsx4(
-            "button",
-            {
-              onClick: () => onOpenChange == null ? void 0 : onOpenChange(false),
-              className: mergedStyle.BtnPrimary(),
-              children: "X"
-            }
-          )
-        ] }),
-        /* @__PURE__ */ jsx4("div", { className: "fec-modal-body", children: /* @__PURE__ */ jsx4("div", { className: "fec-modal-body-inner", children }) }),
-        !removeCloseButton && /* @__PURE__ */ jsx4("div", { className: "fe-d-flex fe-justify-center", children: /* @__PURE__ */ jsx4(
-          "button",
+      open,
+      style: sx3(overrides, style),
+      className,
+      overlay,
+      trapFocus,
+      onOpenChange: () => handleCancel(),
+      closeOnEscape,
+      children: [
+        heading && /* @__PURE__ */ jsx4("h1", { ...styleComponent("Heading", utilities3["fe-text-center"]), children: heading }),
+        text && /* @__PURE__ */ jsx4("p", { ...styleComponent("TextPrimary", utilities3["fe-grow-1"]), children: text }),
+        /* @__PURE__ */ jsxs(
+          "div",
           {
-            className: mergedStyle.BtnPrimary(),
-            onClick: () => onOpenChange == null ? void 0 : onOpenChange(false),
-            children: "Close"
+            style: sx3(
+              utilities3["fe-d-flex"],
+              utilities3["fe-justify-around"],
+              utilities3["fe-w-100"]
+            ),
+            children: [
+              /* @__PURE__ */ jsx4(
+                "button",
+                {
+                  ...styleComponent("BtnDanger"),
+                  onClick: () => handleCancel(),
+                  disabled: pending,
+                  children: cancelLabel
+                }
+              ),
+              /* @__PURE__ */ jsx4(
+                "button",
+                {
+                  ...styleComponent("BtnConfirm"),
+                  onClick: () => handleConfirm(),
+                  disabled: pending,
+                  children: pending ? "Working..." : confirmLabel
+                }
+              )
+            ]
           }
-        ) })
-      ] })
+        )
+      ]
     }
   );
 }
 export {
   ConfirmDialog,
-  ConfirmDialogDefaultStyle,
-  DefaultStyle,
-  Modal,
-  ModalDefaultStyle,
+  FEStyleProvider,
+  FloatingPanel,
+  FocusManagerProvider,
   OptionalPortal,
-  ToastDefaultStyle,
-  ToastMessageDisplay,
-  ToastProvider,
-  useToast
+  defaultStyles,
+  floatingPanelDefaultStyle,
+  useFEStyles,
+  useFocusManager
 };
 //# sourceMappingURL=index.js.map

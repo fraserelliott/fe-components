@@ -2,51 +2,40 @@ import { createContext, useContext } from "react";
 import { feStyle } from "@fraserelliott/fe-utilities";
 
 const FEStyleContext = createContext({
-  defaultMode: "inline",
   theme: {},
 });
 
-export function FEStyleProvider({
-  defaultMode = "inline",
-  theme = {},
-  children,
-}) {
+export function FEStyleProvider({ theme = {}, children }) {
   return (
-    <FEStyleContext.Provider value={{ defaultMode, theme }}>
+    <FEStyleContext.Provider value={{ theme }}>
       {children}
     </FEStyleContext.Provider>
   );
 }
 
-export function useFEStyles(defaultStyles, noAnim = false) {
-  const { defaultMode, theme } = useContext(FEStyleContext);
+export function useFEStyles(
+  defaultStyles = {},
+  baseStyle = {},
+  baseClassName = {},
+  noAnim = false,
+) {
+  const { theme } = useContext(FEStyleContext);
 
-  const styleComponent = (slot, style = {}, className = {}) => {
+  const styleComponent = (slot, style = {}, className = "") => {
     const styles = [];
     const classes = [];
 
-    if (defaultMode === "inline") {
-      styles.push(defaultStyles.inline?.[slot]);
-    } else {
-      classes.push(defaultStyles.classes?.[slot]);
-    }
+    styles.push(defaultStyles.inline?.[slot]);
 
     if (noAnim) {
-      if (defaultMode === "inline") {
-        styles.push(defaultStyles.anim?.noAnim?.inline?.[slot]);
-      } else {
-        classes.push(defaultStyles.anim?.noAnim?.classes?.[slot]);
-      }
+      styles.push(defaultStyles.anim?.noAnim?.[slot]);
     } else {
       classes.push(defaultStyles.anim?.anim?.[slot]);
     }
 
-    if (defaultMode === "inline") {
-      styles.push(theme?.[slot]);
-    }
+    styles.push(theme?.inline?.[slot], baseStyle?.[slot], style);
 
-    styles.push(theme?.inline?.[slot], style?.[slot]);
-    classes.push(theme?.classes?.[slot], className?.[slot]);
+    classes.push(theme?.classes?.[slot], baseClassName?.[slot], className);
 
     return feStyle(styles, classes);
   };
