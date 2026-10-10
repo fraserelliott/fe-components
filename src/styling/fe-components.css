@@ -1,0 +1,92 @@
+.fec-bg-primary {
+  background-color: var(--fec-bg-primary, #f6f6f3);
+}
+
+.fec-bg-secondary {
+  background-color: var(--fec-bg-secondary, #ecece7);
+}
+
+.fec-bg-active {
+  background-color: var(--fec-bg-active, #cfd8e3);
+}
+
+.fec-btn {
+  transition: background-color 140ms ease;
+}
+
+.fec-btn-primary {
+  background-color: var(--fec-btn-primary, #f6f6f3);
+}
+
+.fec-btn-primary-static {
+  background-color: var(--fec-btn-primary, #f6f6f3);
+}
+
+.fec-btn-primary:hover {
+  background-color: var(--fec-bg-active, #cfd8e3);
+}
+
+.fec-btn-confirm {
+  background-color: var(--fec-confirm, #4caf50);
+}
+
+.fec-btn-confirm:hover {
+  background-color: var(--fec-confirm-hover, #388e3c);
+}
+
+.fec-btn-danger {
+  background-color: var(--fec-danger, #d9534f);
+}
+
+.fec-btn-danger:hover {
+  background-color: var(--fec-danger-hover, #c9302c);
+}
+
+.fec-bg-panel {
+  background-color: var(--fec-bg-panel, #ffffff);
+}
+
+.fec-text-primary {
+  color: var(--fec-text-primary, #1f1f1f);
+}
+
+.fec-text-secondary {
+  color: var(--fec-text-secondary, #5a5a5a);
+}
+
+.fec-bg-confirm {
+  background-color: var(--fec-confirm, #4caf50);
+}
+
+.fec-text-confirm {
+  color: var(--fec-confirm, #4caf50);
+}
+
+.fec-bg-danger {
+  background-color: var(--fec-danger, #d9534f);
+}
+
+.fec-text-danger {
+  color: var(--fec-danger, #d9534f);
+}
+
+.fec-border {
+  border: var(--fec-border-width, 1px) var(--fec-border-style, solid)
+    var(--fec-border-color, #d6d6d0);
+}
+
+.fec-shadow-soft {
+  box-shadow: var(
+    --fec-shadow-soft,
+    0 1px 2px rgba(0, 0, 0, 0.05),
+    0 3px 6px rgba(0, 0, 0, 0.06)
+  );
+}
+
+.fec-shadow-medium {
+  box-shadow: var(
+    --fec-shadow-medium,
+    0 4px 8px rgba(0, 0, 0, 0.08),
+    0 8px 16px rgba(0, 0, 0, 0.06)
+  );
+}
