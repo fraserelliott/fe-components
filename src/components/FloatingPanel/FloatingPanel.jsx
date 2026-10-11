@@ -2,6 +2,7 @@ import { floatingPanelDefaultStyle } from "./floatingpanelDefaultStyle";
 import { useFEStyles } from "../../styling/FEStyle";
 import { useRef, useEffect } from "react";
 import { useFocusManager } from "../FocusManager";
+import { sx } from "@fraserelliott/fe-utilities/cx";
 
 /**
  * Renders a floating panel with optional overlay, focus trapping,
@@ -29,6 +30,11 @@ import { useFocusManager } from "../FocusManager";
  * @param {(open: boolean) => void} [props.onOpenChange] - Called
  * when the panel requests a change to its open state.
  * The parent is responsible for updating the open prop.
+ * @param {Object} [props.defaultStyle={}] - Additional default styles merged
+ * into FloatingPanel's defaults before theme and instance overrides are applied.
+ * Uses the same slot-based structure as the component's default styles
+ * (e.g. `{ inline: { Panel: { width: "400px" } } }`).
+ * Set a property to `null` to remove an existing default.
  */
 export function FloatingPanel({
   open,
@@ -40,9 +46,10 @@ export function FloatingPanel({
   closeOnEscape = false,
   closeOnOverlayClick = false,
   onOpenChange,
+  defaultStyle = {},
 }) {
   const { styleComponent } = useFEStyles(
-    floatingPanelDefaultStyle,
+    sx(floatingPanelDefaultStyle, defaultStyle),
     style,
     className,
   );
@@ -57,6 +64,7 @@ export function FloatingPanel({
       trapFocus={trapFocus}
       closeOnEscape={closeOnEscape}
       onOpenChange={onOpenChange}
+      defaultStyle={defaultStyle}
     >
       {children}
     </FloatingPanelInner>
@@ -85,9 +93,10 @@ function FloatingPanelInner({
   trapFocus = false,
   closeOnEscape,
   onOpenChange,
+  defaultStyle,
 }) {
   const { styleComponent } = useFEStyles(
-    floatingPanelDefaultStyle,
+    sx(floatingPanelDefaultStyle, defaultStyle),
     style,
     className,
   );

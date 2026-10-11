@@ -8,11 +8,9 @@ const DefaultStyle = {
     ),
   Btn: (...extra) => cx(FEPresets.Btn, "fec-btn fe-pressable", ...extra),
   BtnPrimary: (...extra) =>
-    cx(FEPresets.Btn, "fec-btn-primary fec-btn fe-pressable", ...extra),
-  BtnDanger: (...extra) =>
-    cx(FEPresets.Btn, "fec-bg-danger fec-btn fe-pressable", ...extra),
-  BtnConfirm: (...extra) =>
-    cx(FEPresets.Btn, "fec-bg-confirm fec-btn fe-pressable", ...extra),
+    cx("fec-btn-primary fec-btn fe-pressable", ...extra),
+  BtnDanger: (...extra) => cx("fec-bg-danger fec-btn fe-pressable", ...extra),
+  BtnConfirm: (...extra) => cx("fec-bg-confirm fec-btn fe-pressable", ...extra),
   Heading: (...extra) => cx("fe-fw-bold", ...extra),
   Overlay: (...extra) =>
     cx(

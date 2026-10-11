@@ -1,10 +1,4 @@
-import {
-  utilities,
-  sx,
-  cx,
-  FEPresetsInline,
-  FEPresetsClasses,
-} from "@fraserelliott/fe-utilities";
+import { utilities, sx, FEPresetsInline } from "@fraserelliott/fe-utilities";
 
 const styles = {
   BgPrimary: {
@@ -105,6 +99,12 @@ export const defaultStyles = {
     }),
     Overlay: overlayBase,
     TextPrimary: styles.TextPrimary,
+    ModalInner: {
+      width: "100%",
+      margin: "0 auto",
+      padding: "2rem",
+      boxSizing: "border-box",
+    },
   },
 
   anim: {

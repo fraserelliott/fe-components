@@ -1,11 +1,5 @@
 // src/styling/defaultStyle.js
-import {
-  utilities,
-  sx,
-  cx,
-  FEPresetsInline,
-  FEPresetsClasses
-} from "@fraserelliott/fe-utilities";
+import { utilities, sx, FEPresetsInline } from "@fraserelliott/fe-utilities";
 var styles = {
   BgPrimary: {
     backgroundColor: "var(--fec-bg-primary, #f6f6f3)"
@@ -87,7 +81,13 @@ var defaultStyles = {
       backdropFilter: "blur(4px)"
     }),
     Overlay: overlayBase,
-    TextPrimary: styles.TextPrimary
+    TextPrimary: styles.TextPrimary,
+    ModalInner: {
+      width: "100%",
+      margin: "0 auto",
+      padding: "2rem",
+      boxSizing: "border-box"
+    }
   },
   anim: {
     anim: {
@@ -258,7 +258,7 @@ function useFocusManager() {
 }
 
 // src/components/FloatingPanel/floatingpanelDefaultStyle.js
-import { cx as cx2, sx as sx2, utilities as utilities2 } from "@fraserelliott/fe-utilities";
+import { cx, sx as sx2, utilities as utilities2 } from "@fraserelliott/fe-utilities";
 var floatingPanelDefaultStyle = {
   inline: {
     Panel: sx2(defaultStyles.inline.Panel, utilities2["fe-pos-absolute"], {
@@ -271,6 +271,7 @@ var floatingPanelDefaultStyle = {
 
 // src/components/FloatingPanel/FloatingPanel.jsx
 import { useRef as useRef2, useEffect as useEffect2 } from "react";
+import { sx as sx3 } from "@fraserelliott/fe-utilities/cx";
 import { jsx as jsx3 } from "react/jsx-runtime";
 function FloatingPanel({
   open,
@@ -281,10 +282,11 @@ function FloatingPanel({
   children,
   closeOnEscape = false,
   closeOnOverlayClick = false,
-  onOpenChange
+  onOpenChange,
+  defaultStyle = {}
 }) {
   const { styleComponent } = useFEStyles(
-    floatingPanelDefaultStyle,
+    sx3(floatingPanelDefaultStyle, defaultStyle),
     style,
     className
   );
@@ -298,6 +300,7 @@ function FloatingPanel({
       trapFocus,
       closeOnEscape,
       onOpenChange,
+      defaultStyle,
       children
     }
   );
@@ -321,10 +324,11 @@ function FloatingPanelInner({
   children,
   trapFocus = false,
   closeOnEscape,
-  onOpenChange
+  onOpenChange,
+  defaultStyle
 }) {
   const { styleComponent } = useFEStyles(
-    floatingPanelDefaultStyle,
+    sx3(floatingPanelDefaultStyle, defaultStyle),
     style,
     className
   );
@@ -361,7 +365,7 @@ function FloatingPanelInner({
 }
 
 // src/components/ConfirmDialog.jsx
-import { sx as sx3, utilities as utilities3 } from "@fraserelliott/fe-utilities";
+import { sx as sx4, utilities as utilities3 } from "@fraserelliott/fe-utilities";
 import { useState } from "react";
 import { jsx as jsx4, jsxs } from "react/jsx-runtime";
 function ConfirmDialog({
@@ -378,7 +382,8 @@ function ConfirmDialog({
   onConfirm,
   onCancel,
   onOpenChange,
-  closeOnEscape
+  closeOnEscape,
+  closeOnOverlayClick
 }) {
   const { styleComponent } = useFEStyles(
     defaultStyles,
@@ -409,28 +414,38 @@ function ConfirmDialog({
       onError == null ? void 0 : onError({ source: "confirm", err });
     }
   };
+  const noOverlayPosition = {
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)"
+  };
   const overrides = {
-    Overlay: { zIndex: "var(--fec-z-dialog, 200)" },
-    BlurOverlay: { zIndex: "var(--fec-z-dialog, 200)" },
-    Panel: utilities3["fe-gap-3"]
+    inline: {
+      Overlay: { zIndex: "var(--fec-z-dialog, 200)" },
+      BlurOverlay: { zIndex: "var(--fec-z-dialog, 200)" },
+      Panel: sx4(utilities3["fe-gap-3"], !overlay && noOverlayPosition)
+    }
   };
   return /* @__PURE__ */ jsxs(
     FloatingPanel,
     {
       open,
-      style: sx3(overrides, style),
+      style,
+      defaultStyle: overrides,
       className,
       overlay,
       trapFocus,
       onOpenChange: () => handleCancel(),
       closeOnEscape,
+      closeOnOverlayClick,
       children: [
         heading && /* @__PURE__ */ jsx4("h1", { ...styleComponent("Heading", utilities3["fe-text-center"]), children: heading }),
         text && /* @__PURE__ */ jsx4("p", { ...styleComponent("TextPrimary", utilities3["fe-grow-1"]), children: text }),
         /* @__PURE__ */ jsxs(
           "div",
           {
-            style: sx3(
+            style: sx4(
               utilities3["fe-d-flex"],
               utilities3["fe-justify-around"],
               utilities3["fe-w-100"]
@@ -461,11 +476,125 @@ function ConfirmDialog({
     }
   );
 }
+
+// src/components/ActionList.jsx
+import { jsx as jsx5 } from "react/jsx-runtime";
+function ActionList({ items, renderItem, getKey }) {
+  if (!renderItem || !items || !getKey) return null;
+  return /* @__PURE__ */ jsx5("ul", { style: { listStyle: "none", padding: 0, margin: 0 }, children: items.map((item) => /* @__PURE__ */ jsx5("li", { children: renderItem(item) }, getKey(item))) });
+}
+
+// src/components/Modal.jsx
+import { sx as sx5, utilities as utilities4 } from "@fraserelliott/fe-utilities";
+import { jsx as jsx6, jsxs as jsxs2 } from "react/jsx-runtime";
+function Modal({
+  open,
+  style = {},
+  className = {},
+  overlay = "blur",
+  trapFocus = true,
+  noAnim = false,
+  heading,
+  closeOnEscape,
+  closeOnOverlayClick,
+  onOpenChange,
+  showCloseButtons = "both",
+  disableCloseButtons,
+  children
+}) {
+  const { styleComponent } = useFEStyles(
+    defaultStyles,
+    style,
+    className,
+    noAnim
+  );
+  const noOverlayPosition = {
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)"
+  };
+  const overrides = {
+    inline: {
+      Overlay: { zIndex: "var(--fec-z-modal, 100)" },
+      BlurOverlay: { zIndex: "var(--fec-z-modal, 100)" },
+      Panel: sx5(
+        utilities4["fe-p-2"],
+        {
+          width: "var(--fec-modal-w, clamp(320px, 80vw, 1536px))",
+          height: "var(--fec-modal-h, clamp(240px, 80vh, 864px))",
+          maxWidth: "90vw",
+          maxHeight: "90vh"
+        },
+        !overlay && noOverlayPosition
+      )
+    }
+  };
+  const renderCornerBtn = showCloseButtons === "both" || showCloseButtons === "corner";
+  const renderBottomBtn = showCloseButtons === "both" || showCloseButtons === "bottom";
+  return /* @__PURE__ */ jsxs2(
+    FloatingPanel,
+    {
+      open,
+      defaultStyle: overrides,
+      style,
+      className,
+      overlay,
+      trapFocus,
+      onOpenChange,
+      closeOnEscape,
+      closeOnOverlayClick,
+      children: [
+        /* @__PURE__ */ jsxs2(
+          "div",
+          {
+            style: sx5(
+              utilities4["fe-d-flex"],
+              utilities4["fe-justify-between"],
+              utilities4["fe-w-100"]
+            ),
+            children: [
+              /* @__PURE__ */ jsx6("div", {}),
+              heading != null && /* @__PURE__ */ jsx6("h1", { ...styleComponent("Heading"), children: heading }),
+              /* @__PURE__ */ jsx6("div", { children: renderCornerBtn && /* @__PURE__ */ jsx6(
+                "button",
+                {
+                  ...styleComponent("BtnPrimary"),
+                  onClick: () => onOpenChange == null ? void 0 : onOpenChange(false),
+                  disabled: disableCloseButtons,
+                  children: "X"
+                }
+              ) })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsx6(
+          "div",
+          {
+            style: { flex: "1 1 auto", minWidth: 0, minHeight: 0, width: "100%" },
+            children: /* @__PURE__ */ jsx6("div", { ...styleComponent("ModalInner"), children })
+          }
+        ),
+        renderBottomBtn && /* @__PURE__ */ jsx6("div", { style: sx5(utilities4["fe-d-flex"], utilities4["fe-justify-center"]), children: /* @__PURE__ */ jsx6(
+          "button",
+          {
+            ...styleComponent("BtnPrimary"),
+            onClick: () => onOpenChange == null ? void 0 : onOpenChange(false),
+            disabled: disableCloseButtons,
+            children: "Close"
+          }
+        ) })
+      ]
+    }
+  );
+}
 export {
+  ActionList,
   ConfirmDialog,
   FEStyleProvider,
   FloatingPanel,
   FocusManagerProvider,
+  Modal,
   OptionalPortal,
   defaultStyles,
   floatingPanelDefaultStyle,

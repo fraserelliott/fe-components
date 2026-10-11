@@ -63,7 +63,7 @@ export function ConfirmDialogPage() {
           cancelLabel="NO!"
           confirmLabel="Okay then"
           closeOnEscape
-          overlay={true}
+          overlay={false}
         />
       </OptionalPortal>
     </div>

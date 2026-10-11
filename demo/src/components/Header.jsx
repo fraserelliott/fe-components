@@ -4,6 +4,7 @@ import { UI } from "@styles";
 const pages = [
   { name: "Home", to: "/" },
   { name: "Confirm Dialog", to: "/confirmdialog" },
+  { name: "Modal", to: "/modal" },
 ];
 
 export function Header() {
