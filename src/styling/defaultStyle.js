@@ -75,6 +75,21 @@ const overlayBase = sx(
   },
 );
 
+const toastBase = sx(
+  utilities["fe-d-flex"],
+  utilities["fe-justify-center"],
+  utilities["fe-items-center"],
+  styles.Border,
+  styles.ShadowSoft,
+  utilities["fe-rounded-2"],
+  {
+    width: "var(--fec-toast-width, 200px)",
+    minHeight: "var(--fec-toast-min-height, 50px)",
+    opacity: "0.8",
+    zIndex: "var(--fec-z-toast, 300)",
+  },
+);
+
 export const defaultStyles = {
   inline: {
     Panel: sx(
@@ -105,6 +120,10 @@ export const defaultStyles = {
       padding: "2rem",
       boxSizing: "border-box",
     },
+    Container: utilities["fe-d-flex"],
+    Toast: toastBase,
+    ToastSuccess: sx(toastBase, styles.BgConfirm),
+    ToastError: sx(toastBase, styles.BgDanger),
   },
 
   anim: {
@@ -113,6 +132,9 @@ export const defaultStyles = {
       BtnPrimary: "fec-btn fec-btn-primary fe-pressable",
       BtnConfirm: "fec-btn fec-btn-confirm fe-pressable",
       BtnDanger: "fec-btn fec-btn-danger fe-pressable",
+      Toast: "fec-opacity-ease-out",
+      ToastSuccess: "fec-opacity-ease-out",
+      ToastError: "fec-opacity-ease-out",
     },
 
     noAnim: {

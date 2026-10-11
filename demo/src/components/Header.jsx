@@ -5,6 +5,7 @@ const pages = [
   { name: "Home", to: "/" },
   { name: "Confirm Dialog", to: "/confirmdialog" },
   { name: "Modal", to: "/modal" },
+  { name: "Toast", to: "/toast" },
 ];
 
 export function Header() {

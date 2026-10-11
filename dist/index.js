@@ -58,6 +58,20 @@ var overlayBase = sx(
     zIndex: "var(--fec-z-overlay, 100)"
   }
 );
+var toastBase = sx(
+  utilities["fe-d-flex"],
+  utilities["fe-justify-center"],
+  utilities["fe-items-center"],
+  styles.Border,
+  styles.ShadowSoft,
+  utilities["fe-rounded-2"],
+  {
+    width: "var(--fec-toast-width, 200px)",
+    minHeight: "var(--fec-toast-min-height, 50px)",
+    opacity: "0.8",
+    zIndex: "var(--fec-z-toast, 300)"
+  }
+);
 var defaultStyles = {
   inline: {
     Panel: sx(
@@ -87,14 +101,21 @@ var defaultStyles = {
       margin: "0 auto",
       padding: "2rem",
       boxSizing: "border-box"
-    }
+    },
+    Container: utilities["fe-d-flex"],
+    Toast: toastBase,
+    ToastSuccess: sx(toastBase, styles.BgConfirm),
+    ToastError: sx(toastBase, styles.BgDanger)
   },
   anim: {
     anim: {
       Btn: "fec-btn fe-pressable",
       BtnPrimary: "fec-btn fec-btn-primary fe-pressable",
       BtnConfirm: "fec-btn fec-btn-confirm fe-pressable",
-      BtnDanger: "fec-btn fec-btn-danger fe-pressable"
+      BtnDanger: "fec-btn fec-btn-danger fe-pressable",
+      Toast: "fec-opacity-ease-out",
+      ToastSuccess: "fec-opacity-ease-out",
+      ToastError: "fec-opacity-ease-out"
     },
     noAnim: {
       BtnPrimary: styles.BtnPrimary,
@@ -495,11 +516,11 @@ function Modal({
   trapFocus = true,
   noAnim = false,
   heading,
-  closeOnEscape,
-  closeOnOverlayClick,
+  closeOnEscape = false,
+  closeOnOverlayClick = false,
   onOpenChange,
   showCloseButtons = "both",
-  disableCloseButtons,
+  disableCloseButtons = false,
   children
 }) {
   const { styleComponent } = useFEStyles(
@@ -588,6 +609,171 @@ function Modal({
     }
   );
 }
+
+// src/components/Toast/ToastProvider.jsx
+import {
+  createContext as createContext3,
+  useState as useState2,
+  useCallback as useCallback2,
+  useMemo,
+  useRef as useRef3,
+  useEffect as useEffect3,
+  useContext as useContext3
+} from "react";
+import { v4 as uuid } from "uuid";
+import { jsx as jsx7 } from "react/jsx-runtime";
+var ToastContext = createContext3();
+function ToastProvider({
+  children,
+  fadeMs = 150,
+  defaultDelayMs = 2350
+}) {
+  const [toastMessages, setToastMessages] = useState2([]);
+  const fadeStartTimersRef = useRef3(/* @__PURE__ */ new Map());
+  const removeTimersRef = useRef3(/* @__PURE__ */ new Map());
+  useEffect3(() => {
+    return () => {
+      for (const t of fadeStartTimersRef.current.values())
+        window.clearTimeout(t);
+      for (const t of removeTimersRef.current.values()) window.clearTimeout(t);
+      fadeStartTimersRef.current.clear();
+      removeTimersRef.current.clear();
+    };
+  }, []);
+  const clearTimersFor = useCallback2((id) => {
+    const fadeStartTimer = fadeStartTimersRef.current.get(id);
+    if (fadeStartTimer != null) {
+      window.clearTimeout(fadeStartTimer);
+      fadeStartTimersRef.current.delete(id);
+    }
+    const removeTimer = removeTimersRef.current.get(id);
+    if (removeTimer != null) {
+      window.clearTimeout(removeTimer);
+      removeTimersRef.current.delete(id);
+    }
+  }, []);
+  const startFadeAndScheduleRemove = useCallback2(
+    (id) => {
+      setToastMessages(
+        (prev) => prev.map((msg) => msg.id === id ? { ...msg, fading: true } : msg)
+      );
+      clearTimersFor(id);
+      const removeTimer = window.setTimeout(() => {
+        setToastMessages((prev) => prev.filter((msg) => msg.id !== id));
+        removeTimersRef.current.delete(id);
+      }, fadeMs);
+      removeTimersRef.current.set(id, removeTimer);
+    },
+    [fadeMs, clearTimersFor]
+  );
+  const dismissToast = useCallback2(
+    (id) => {
+      startFadeAndScheduleRemove(id);
+    },
+    [startFadeAndScheduleRemove]
+  );
+  const addToastMessage = useCallback2(
+    (message, type, delayMs = defaultDelayMs) => {
+      const id = uuid();
+      setToastMessages((prev) => [
+        ...prev,
+        { id, message, type, fading: false }
+      ]);
+      clearTimersFor(id);
+      const fadeStartTimer = window.setTimeout(() => {
+        startFadeAndScheduleRemove(id);
+        fadeStartTimersRef.current.delete(id);
+      }, delayMs);
+      fadeStartTimersRef.current.set(id, fadeStartTimer);
+      return id;
+    },
+    [defaultDelayMs, clearTimersFor, startFadeAndScheduleRemove]
+  );
+  const value = useMemo(
+    () => ({ toastMessages, addToastMessage, dismissToast }),
+    [toastMessages, addToastMessage, dismissToast]
+  );
+  return /* @__PURE__ */ jsx7(ToastContext.Provider, { value, children });
+}
+function useToast() {
+  const ctx = useContext3(ToastContext);
+  if (ctx === void 0) {
+    throw new Error("useToast must be used within a ToastProvider");
+  }
+  return ctx;
+}
+
+// src/components/Toast/ToastMessageDisplay.jsx
+import { sx as sx6, utilities as utilities5 } from "@fraserelliott/fe-utilities";
+import { jsx as jsx8 } from "react/jsx-runtime";
+var positionStyleMap = {
+  "bottom-right": {
+    bottom: "var(--fec-toast-inset-y, 3rem)",
+    right: "var(--fec-toast-inset-x, 1rem)",
+    top: "auto",
+    left: "auto",
+    alignItems: "flex-end"
+  },
+  "bottom-left": {
+    bottom: "var(--fec-toast-inset-y, 3rem)",
+    left: "var(--fec-toast-inset-x, 1rem)",
+    top: "auto",
+    right: "auto",
+    alignItems: "flex-start"
+  },
+  "top-right": {
+    top: "var(--fec-toast-inset-y, 3rem)",
+    right: "var(--fec-toast-inset-x, 1rem)",
+    bottom: "auto",
+    left: "auto",
+    alignItems: "flex-end"
+  },
+  "top-left": {
+    top: "var(--fec-toast-inset-y, 3rem)",
+    left: "var(--fec-toast-inset-x, 1rem)",
+    bottom: "auto",
+    right: "auto",
+    alignItems: "flex-start"
+  }
+};
+function ToastMessageDisplay({
+  style = {},
+  className = {},
+  position = "bottom-right",
+  direction = "column-reverse",
+  clearOnClick = false,
+  noAnim
+}) {
+  const { styleComponent } = useFEStyles(
+    sx6(defaultStyles, {
+      inline: {
+        ToastContainer: sx6(
+          utilities5["fe-pos-fixed"],
+          positionStyleMap[position],
+          {
+            flexDirection: direction
+          }
+        )
+      }
+    }),
+    style,
+    className,
+    noAnim
+  );
+  const { toastMessages, dismissToast } = useToast();
+  return /* @__PURE__ */ jsx8("div", { ...styleComponent("ToastContainer"), children: toastMessages && toastMessages.map((toast) => {
+    const slot = toast.type === "success" ? "ToastSuccess" : toast.type === "error" ? "ToastError" : "Toast";
+    return /* @__PURE__ */ jsx8(
+      "p",
+      {
+        onClick: () => clearOnClick && dismissToast(toast.id),
+        ...styleComponent(slot),
+        children: toast.message
+      },
+      toast.id
+    );
+  }) });
+}
 export {
   ActionList,
   ConfirmDialog,
@@ -596,9 +782,12 @@ export {
   FocusManagerProvider,
   Modal,
   OptionalPortal,
+  ToastMessageDisplay,
+  ToastProvider,
   defaultStyles,
   floatingPanelDefaultStyle,
   useFEStyles,
-  useFocusManager
+  useFocusManager,
+  useToast
 };
 //# sourceMappingURL=index.js.map

@@ -5,6 +5,7 @@ import { HomePage } from "@pages/HomePage";
 import { ConfirmDialogPage } from "@pages/ConfirmDialogPage";
 import { Header } from "@components/Header";
 import { ModalPage } from "./pages/ModalPage";
+import { ToastPage } from "./pages/ToastPage";
 
 const basename = import.meta.env.PROD ? "/fe-components/" : "/";
 
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/confirmdialog" element={<ConfirmDialogPage />} />
           <Route path="/modal" element={<ModalPage />} />
+          <Route path="/toast" element={<ToastPage />} />
         </Routes>
       </BrowserRouter>
     </>
