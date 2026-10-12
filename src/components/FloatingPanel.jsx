@@ -2,7 +2,7 @@ import { defaultStyles } from "../styling/defaultStyle";
 import { useFEStyles } from "../styling/FEStyle";
 import { useRef, useEffect } from "react";
 import { useFocusManager } from "./FocusManager";
-import { sx } from "@fraserelliott/fe-utilities/cx";
+import { sx, utilities } from "@fraserelliott/fe-utilities";
 
 /**
  * Renders a floating panel with optional overlay, focus trapping,
@@ -50,7 +50,7 @@ export function FloatingPanel({
 }) {
   const overrides = {
     inline: {
-      Panel: sx(S.inline.Panel, utilities["fe-pos-absolute"], {
+      Panel: sx(defaultStyles.inline.Panel, utilities["fe-pos-absolute"], {
         zIndex: "var(--fec-z-floating-panel, 50)",
       }),
     },
@@ -103,7 +103,7 @@ function FloatingPanelInner({
   defaultStyle,
 }) {
   const { styleComponent } = useFEStyles(
-    sx(floatingPanelDefaultStyle, defaultStyle),
+    sx(defaultStyles, defaultStyle),
     style,
     className,
   );

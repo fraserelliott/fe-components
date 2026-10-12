@@ -6,7 +6,7 @@
   "main": "./dist/index.js",
   "exports": {
     ".": "./dist/index.js",
-    "./stylesheet": "./dist/index.css"
+    "./fe-components.css": "./src/styling/fe-components.css"
   },
   "files": [
     "dist"

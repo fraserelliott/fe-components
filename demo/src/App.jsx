@@ -1,5 +1,5 @@
-import "./App.css";
 import "@fraserelliott/fe-utilities/fe-utilities.css";
+import "@fraserelliott/fe-components/fe-components.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { HomePage } from "@pages/HomePage";
 import { ConfirmDialogPage } from "@pages/ConfirmDialogPage";

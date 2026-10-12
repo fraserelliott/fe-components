@@ -13,6 +13,55 @@ export function FEStyleProvider({ theme = {}, children }) {
   );
 }
 
+/**
+ * Provides a slot-based styling function that merges component defaults,
+ * provider themes, consumer overrides, and element-level styles.
+ *
+ * Styles are applied in the following precedence order (lowest to highest):
+ * 1. Component default styles
+ * 2. Animation-disabled styles (when `noAnim` is true)
+ * 3. FEStyleProvider theme styles
+ * 4. Consumer-provided base styles
+ * 5. Element-level styles passed to `styleComponent`
+ *
+ * CSS classes are combined from the applicable animation, theme,
+ * consumer, and element-level class definitions.
+ *
+ * @param {Object} [defaultStyles={}] - Component styling definitions, including
+ *   `inline` slot styles and optional `anim` / `noAnim` definitions.
+ * @param {Object<string, Object>} [baseStyle={}] - Consumer inline style overrides,
+ *   keyed by styling slot.
+ * @param {Object<string, string>} [baseClassName={}] - Consumer CSS class names,
+ *   keyed by styling slot.
+ * @param {boolean} [noAnim=false] - Disables default animation classes and applies
+ *   animation-disabled style overrides where defined.
+ *
+ * @returns {{
+ *   styleComponent: (
+ *     slot: string,
+ *     style?: Object,
+ *     className?: string
+ *   ) => { style: Object, className: string }
+ * }} A styling function that returns props suitable for spreading onto a JSX element.
+ *
+ * @example
+ * const { styleComponent } = useFEStyles(
+ *   defaultStyles,
+ *   style,
+ *   className,
+ *   noAnim
+ * );
+ *
+ * return <div {...styleComponent("Panel")}>Content</div>;
+ *
+ * @example
+ * // Apply element-level overrides.
+ * <button
+ *   {...styleComponent("BtnPrimary", { width: "100%" }, "custom-button")}
+ * >
+ *   Submit
+ * </button>
+ */
 export function useFEStyles(
   defaultStyles = {},
   baseStyle = {},

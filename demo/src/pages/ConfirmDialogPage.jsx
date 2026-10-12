@@ -1,5 +1,9 @@
-import { ConfirmDialog, OptionalPortal } from "@fraserelliott/fe-components";
-import { UI } from "@styles";
+import {
+  ConfirmDialog,
+  OptionalPortal,
+  useFEStyles,
+  defaultStyles,
+} from "@fraserelliott/fe-components";
 import { useState } from "react";
 
 function formatDateTime(date) {
@@ -16,6 +20,7 @@ function formatDateTime(date) {
 export function ConfirmDialogPage() {
   const [showDialog, setShowDialog] = useState(false);
   const [eventLog, setEventLog] = useState([]);
+  const { styleComponent } = useFEStyles(defaultStyles);
 
   const log = (message) =>
     setEventLog((prev) => [...prev, { time: new Date(), message }]);
@@ -38,8 +43,13 @@ export function ConfirmDialogPage() {
   };
 
   return (
-    <div className={UI.Panel()}>
-      <button onClick={() => setShowDialog(true)}>Open Dialog</button>
+    <div {...styleComponent("Panel", { alignItems: "center", gap: "1em" })}>
+      <button
+        {...styleComponent("BtnPrimary", { width: "10rem" })}
+        onClick={() => setShowDialog(true)}
+      >
+        Open Dialog
+      </button>
 
       <ul style={{ listStyle: "none" }}>
         {eventLog.map((event, index) => {

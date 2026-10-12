@@ -1,12 +1,17 @@
 import { useForm } from "react-hook-form";
-import { useToast } from "@fraserelliott/fe-components";
-import { UI } from "@styles";
+import {
+  useToast,
+  defaultStyles,
+  useFEStyles,
+} from "@fraserelliott/fe-components";
+import { utilities, sx } from "@fraserelliott/fe-utilities";
 
 export function ToastForm({ title, type }) {
   const { addToastMessage } = useToast();
   const { register, handleSubmit, reset } = useForm({
     defaultValues: { message: "" },
   });
+  const { styleComponent } = useFEStyles(defaultStyles);
 
   const onSubmit = ({ message }) => {
     addToastMessage(message, type);
@@ -18,7 +23,11 @@ export function ToastForm({ title, type }) {
       <h2>{title}</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="fe-d-flex fe-flex-column fe-gap-1"
+        style={sx(
+          utilities["fe-d-flex"],
+          utilities["fe-flex-column"],
+          utilities["fe-gap-1"],
+        )}
       >
         <label>Message:</label>
         <textarea
@@ -26,7 +35,7 @@ export function ToastForm({ title, type }) {
           style={{ width: "300px" }}
           rows="4"
         />
-        <input type="submit" value="Submit" className={UI.BtnPrimary()} />
+        <input type="submit" value="Submit" {...styleComponent("BtnPrimary")} />
       </form>
     </div>
   );

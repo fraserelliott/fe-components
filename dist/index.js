@@ -1,5 +1,5 @@
 // src/styling/defaultStyle.js
-import { utilities as utilities2, sx, FEPresetsInline } from "@fraserelliott/fe-utilities";
+import { utilities, sx, FEPresetsInline } from "@fraserelliott/fe-utilities";
 var styles = {
   BgPrimary: {
     backgroundColor: "var(--fec-bg-primary, #f6f6f3)"
@@ -47,10 +47,10 @@ var styles = {
   }
 };
 var overlayBase = sx(
-  utilities2["fe-pos-fixed"],
-  utilities2["fe-d-flex"],
-  utilities2["fe-justify-center"],
-  utilities2["fe-items-center"],
+  utilities["fe-pos-fixed"],
+  utilities["fe-d-flex"],
+  utilities["fe-justify-center"],
+  utilities["fe-items-center"],
   {
     inset: 0,
     width: "100%",
@@ -59,12 +59,12 @@ var overlayBase = sx(
   }
 );
 var toastBase = sx(
-  utilities2["fe-d-flex"],
-  utilities2["fe-justify-center"],
-  utilities2["fe-items-center"],
+  utilities["fe-d-flex"],
+  utilities["fe-justify-center"],
+  utilities["fe-items-center"],
   styles.Border,
   styles.ShadowSoft,
-  utilities2["fe-rounded-2"],
+  utilities["fe-rounded-2"],
   {
     width: "var(--fec-toast-width, 200px)",
     minHeight: "var(--fec-toast-min-height, 50px)",
@@ -75,11 +75,11 @@ var toastBase = sx(
 var defaultStyles = {
   inline: {
     Panel: sx(
-      utilities2["fe-d-flex"],
-      utilities2["fe-flex-column"],
-      utilities2["fe-p-em-3"],
-      utilities2["fe-rounded-2"],
-      utilities2["fe-p-em-2"],
+      utilities["fe-d-flex"],
+      utilities["fe-flex-column"],
+      utilities["fe-p-em-3"],
+      utilities["fe-rounded-2"],
+      utilities["fe-p-em-2"],
       styles.BgPanel,
       styles.TextPrimary,
       styles.Border,
@@ -89,7 +89,7 @@ var defaultStyles = {
     BtnPrimary: sx(FEPresetsInline.Btn),
     BtnDanger: sx(FEPresetsInline.Btn, styles.BgDanger),
     BtnConfirm: sx(FEPresetsInline.Btn, styles.BgConfirm),
-    Heading: sx(utilities2["fe-fw-bold"]),
+    Heading: sx(utilities["fe-fw-bold"]),
     BlurOverlay: sx(overlayBase, {
       backgroundColor: "rgba(0, 0, 0, 0.5)",
       backdropFilter: "blur(4px)"
@@ -102,14 +102,14 @@ var defaultStyles = {
       padding: "2rem",
       boxSizing: "border-box"
     },
-    Container: utilities2["fe-d-flex"],
+    Container: utilities["fe-d-flex"],
     Toast: toastBase,
     ToastSuccess: sx(toastBase, styles.BgConfirm),
     ToastError: sx(toastBase, styles.BgDanger),
-    Table: sx(utilities2["fe-w-100"], utilities2["fe-p-em-2"], {
+    Table: sx(utilities["fe-w-100"], utilities["fe-p-em-2"], {
       borderCollapse: "collapse"
     }),
-    TableCell: sx(styles.Border, utilities2["fe-p-em-1"])
+    TableCell: sx(styles.Border, utilities["fe-p-em-1"])
   },
   anim: {
     anim: {
@@ -284,7 +284,7 @@ function useFocusManager() {
 
 // src/components/FloatingPanel.jsx
 import { useRef as useRef2, useEffect as useEffect2 } from "react";
-import { sx as sx2 } from "@fraserelliott/fe-utilities/cx";
+import { sx as sx2, utilities as utilities2 } from "@fraserelliott/fe-utilities";
 import { jsx as jsx3 } from "react/jsx-runtime";
 function FloatingPanel({
   open,
@@ -300,7 +300,7 @@ function FloatingPanel({
 }) {
   const overrides = {
     inline: {
-      Panel: sx2(S.inline.Panel, utilities["fe-pos-absolute"], {
+      Panel: sx2(defaultStyles.inline.Panel, utilities2["fe-pos-absolute"], {
         zIndex: "var(--fec-z-floating-panel, 50)"
       })
     }
@@ -348,7 +348,7 @@ function FloatingPanelInner({
   defaultStyle
 }) {
   const { styleComponent } = useFEStyles(
-    sx2(floatingPanelDefaultStyle, defaultStyle),
+    sx2(defaultStyles, defaultStyle),
     style,
     className
   );
@@ -809,9 +809,9 @@ function ActionTable({
           ...styleComponent("TableCell"),
           key: column.key ?? column.field
         },
-        column.label
+        /* @__PURE__ */ jsx9("span", { ...styleComponent("Heading"), children: column.label })
       )),
-      actions.length > 0 && separateActionColumns && actions.map((action) => /* @__PURE__ */ createElement("th", { ...styleComponent("TableCell"), key: action.key }, action.label)),
+      actions.length > 0 && separateActionColumns && actions.map((action) => /* @__PURE__ */ createElement("th", { ...styleComponent("TableCell"), key: action.key }, /* @__PURE__ */ jsx9("span", { ...styleComponent("Heading"), children: action.label }))),
       actions.length > 0 && !separateActionColumns && /* @__PURE__ */ jsx9("th", { ...styleComponent("TableCell"), children: "Actions" })
     ] }) }),
     /* @__PURE__ */ jsx9("tbody", { children: items.map((item) => /* @__PURE__ */ jsxs3("tr", { children: [

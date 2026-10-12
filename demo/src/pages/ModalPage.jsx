@@ -1,6 +1,11 @@
-import { Modal, OptionalPortal } from "@fraserelliott/fe-components";
-import { UI } from "@styles";
+import {
+  Modal,
+  OptionalPortal,
+  useFEStyles,
+  defaultStyles,
+} from "@fraserelliott/fe-components";
 import { useState } from "react";
+import { utilities, sx } from "@fraserelliott/fe-utilities";
 
 export function ModalPage() {
   const [showModal, setShowModal] = useState(false);
@@ -8,10 +13,11 @@ export function ModalPage() {
   const [showCloseButtons, setShowCloseButtons] = useState(false);
   const [closeOnOverlayClick, setCloseOnOverlayClick] = useState(true);
   const [overlay, setOverlay] = useState("blur");
+  const { styleComponent } = useFEStyles(defaultStyles);
 
   return (
-    <div className={UI.Panel("fe-d-flex fe-flex-column fe-gap-2")}>
-      <div className="fe-d-flex fe-justify-center">
+    <div {...styleComponent("Panel", utilities["fe-gap-2"])}>
+      <div style={sx(utilities["fe-d-flex"], utilities["fe-justify-center"])}>
         <label>Close on escape</label>
         <input
           type="checkbox"
@@ -68,7 +74,10 @@ export function ModalPage() {
         </select>
       </div>
 
-      <button onClick={() => setShowModal(true)} className={UI.BtnPrimary()}>
+      <button
+        onClick={() => setShowModal(true)}
+        {...styleComponent("BtnPrimary")}
+      >
         Open Modal
       </button>
 
@@ -84,7 +93,7 @@ export function ModalPage() {
         >
           <p>Modal Text</p>
           <button
-            className={UI.BtnPrimary()}
+            {...styleComponent("BtnPrimary")}
             onClick={() => alert("Look at me!")}
           >
             I'm Mr Meeseeks

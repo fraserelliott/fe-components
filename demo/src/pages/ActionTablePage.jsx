@@ -1,5 +1,11 @@
-import { ActionTable, ActionList } from "@fraserelliott/fe-components";
+import {
+  ActionTable,
+  ActionList,
+  defaultStyles,
+  useFEStyles,
+} from "@fraserelliott/fe-components";
 import { useState } from "react";
+import { utilities } from "@fraserelliott/fe-utilities";
 
 const initialPeople = [
   {
@@ -119,6 +125,7 @@ export function ActionTablePage() {
   const [columnsIncluded, setColumnsIncluded] = useState(
     columns.map((c) => ({ field: c.field, include: true })),
   );
+  const { styleComponent } = useFEStyles(defaultStyles);
 
   const resetPeople = () => {
     setPeople(initialPeople);
@@ -162,16 +169,18 @@ export function ActionTablePage() {
 
   return (
     <>
-      <div>
+      <div {...styleComponent("Panel", utilities["fe-gap-2"])}>
         <ActionList
           items={columns}
           getKey={(column) => column.field}
           renderItem={renderColumnCheckbox}
         />
-        <button onClick={() => resetPeople()}>Reset People</button>
+        <button {...styleComponent("BtnPrimary")} onClick={() => resetPeople()}>
+          Reset People
+        </button>
       </div>
 
-      <div>
+      <div {...styleComponent("Panel")}>
         <ActionTable
           getKey={(person) => person.id}
           columns={columns.filter(isColumnIncluded)}

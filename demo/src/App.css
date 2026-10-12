@@ -1,8 +1,0 @@
-.list-style-none {
-  list-style: none;
-}
-
-.fec-home-panel {
-  width: clamp(300px, 75vw, 400px);
-  max-width: 90vw;
-}

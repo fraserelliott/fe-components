@@ -59,14 +59,14 @@ export function ActionTable({
               {...styleComponent("TableCell")}
               key={column.key ?? column.field}
             >
-              {column.label}
+              <span {...styleComponent("Heading")}>{column.label}</span>
             </th>
           ))}
           {actions.length > 0 &&
             separateActionColumns &&
             actions.map((action) => (
               <th {...styleComponent("TableCell")} key={action.key}>
-                {action.label}
+                <span {...styleComponent("Heading")}>{action.label}</span>
               </th>
             ))}
           {actions.length > 0 && !separateActionColumns && (
