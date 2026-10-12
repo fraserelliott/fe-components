@@ -124,6 +124,10 @@ export const defaultStyles = {
     Toast: toastBase,
     ToastSuccess: sx(toastBase, styles.BgConfirm),
     ToastError: sx(toastBase, styles.BgDanger),
+    Table: sx(utilities["fe-w-100"], utilities["fe-p-em-2"], {
+      borderCollapse: "collapse",
+    }),
+    TableCell: sx(styles.Border, utilities["fe-p-em-1"]),
   },
 
   anim: {

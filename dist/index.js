@@ -1,5 +1,5 @@
 // src/styling/defaultStyle.js
-import { utilities, sx, FEPresetsInline } from "@fraserelliott/fe-utilities";
+import { utilities as utilities2, sx, FEPresetsInline } from "@fraserelliott/fe-utilities";
 var styles = {
   BgPrimary: {
     backgroundColor: "var(--fec-bg-primary, #f6f6f3)"
@@ -47,10 +47,10 @@ var styles = {
   }
 };
 var overlayBase = sx(
-  utilities["fe-pos-fixed"],
-  utilities["fe-d-flex"],
-  utilities["fe-justify-center"],
-  utilities["fe-items-center"],
+  utilities2["fe-pos-fixed"],
+  utilities2["fe-d-flex"],
+  utilities2["fe-justify-center"],
+  utilities2["fe-items-center"],
   {
     inset: 0,
     width: "100%",
@@ -59,12 +59,12 @@ var overlayBase = sx(
   }
 );
 var toastBase = sx(
-  utilities["fe-d-flex"],
-  utilities["fe-justify-center"],
-  utilities["fe-items-center"],
+  utilities2["fe-d-flex"],
+  utilities2["fe-justify-center"],
+  utilities2["fe-items-center"],
   styles.Border,
   styles.ShadowSoft,
-  utilities["fe-rounded-2"],
+  utilities2["fe-rounded-2"],
   {
     width: "var(--fec-toast-width, 200px)",
     minHeight: "var(--fec-toast-min-height, 50px)",
@@ -75,11 +75,11 @@ var toastBase = sx(
 var defaultStyles = {
   inline: {
     Panel: sx(
-      utilities["fe-d-flex"],
-      utilities["fe-flex-column"],
-      utilities["fe-p-em-3"],
-      utilities["fe-rounded-2"],
-      utilities["fe-p-em-2"],
+      utilities2["fe-d-flex"],
+      utilities2["fe-flex-column"],
+      utilities2["fe-p-em-3"],
+      utilities2["fe-rounded-2"],
+      utilities2["fe-p-em-2"],
       styles.BgPanel,
       styles.TextPrimary,
       styles.Border,
@@ -89,7 +89,7 @@ var defaultStyles = {
     BtnPrimary: sx(FEPresetsInline.Btn),
     BtnDanger: sx(FEPresetsInline.Btn, styles.BgDanger),
     BtnConfirm: sx(FEPresetsInline.Btn, styles.BgConfirm),
-    Heading: sx(utilities["fe-fw-bold"]),
+    Heading: sx(utilities2["fe-fw-bold"]),
     BlurOverlay: sx(overlayBase, {
       backgroundColor: "rgba(0, 0, 0, 0.5)",
       backdropFilter: "blur(4px)"
@@ -102,10 +102,14 @@ var defaultStyles = {
       padding: "2rem",
       boxSizing: "border-box"
     },
-    Container: utilities["fe-d-flex"],
+    Container: utilities2["fe-d-flex"],
     Toast: toastBase,
     ToastSuccess: sx(toastBase, styles.BgConfirm),
-    ToastError: sx(toastBase, styles.BgDanger)
+    ToastError: sx(toastBase, styles.BgDanger),
+    Table: sx(utilities2["fe-w-100"], utilities2["fe-p-em-2"], {
+      borderCollapse: "collapse"
+    }),
+    TableCell: sx(styles.Border, utilities2["fe-p-em-1"])
   },
   anim: {
     anim: {
@@ -278,21 +282,9 @@ function useFocusManager() {
   return ctx;
 }
 
-// src/components/FloatingPanel/floatingpanelDefaultStyle.js
-import { cx, sx as sx2, utilities as utilities2 } from "@fraserelliott/fe-utilities";
-var floatingPanelDefaultStyle = {
-  inline: {
-    Panel: sx2(defaultStyles.inline.Panel, utilities2["fe-pos-absolute"], {
-      zIndex: "var(--fec-z-floating-panel, 50)"
-    }),
-    BlurOverlay: defaultStyles.inline.BlurOverlay,
-    Overlay: defaultStyles.inline.Overlay
-  }
-};
-
-// src/components/FloatingPanel/FloatingPanel.jsx
+// src/components/FloatingPanel.jsx
 import { useRef as useRef2, useEffect as useEffect2 } from "react";
-import { sx as sx3 } from "@fraserelliott/fe-utilities/cx";
+import { sx as sx2 } from "@fraserelliott/fe-utilities/cx";
 import { jsx as jsx3 } from "react/jsx-runtime";
 function FloatingPanel({
   open,
@@ -306,8 +298,15 @@ function FloatingPanel({
   onOpenChange,
   defaultStyle = {}
 }) {
+  const overrides = {
+    inline: {
+      Panel: sx2(S.inline.Panel, utilities["fe-pos-absolute"], {
+        zIndex: "var(--fec-z-floating-panel, 50)"
+      })
+    }
+  };
   const { styleComponent } = useFEStyles(
-    sx3(floatingPanelDefaultStyle, defaultStyle),
+    sx2(defaultStyles, overrides, defaultStyle),
     style,
     className
   );
@@ -349,7 +348,7 @@ function FloatingPanelInner({
   defaultStyle
 }) {
   const { styleComponent } = useFEStyles(
-    sx3(floatingPanelDefaultStyle, defaultStyle),
+    sx2(floatingPanelDefaultStyle, defaultStyle),
     style,
     className
   );
@@ -386,7 +385,7 @@ function FloatingPanelInner({
 }
 
 // src/components/ConfirmDialog.jsx
-import { sx as sx4, utilities as utilities3 } from "@fraserelliott/fe-utilities";
+import { sx as sx3, utilities as utilities3 } from "@fraserelliott/fe-utilities";
 import { useState } from "react";
 import { jsx as jsx4, jsxs } from "react/jsx-runtime";
 function ConfirmDialog({
@@ -445,7 +444,7 @@ function ConfirmDialog({
     inline: {
       Overlay: { zIndex: "var(--fec-z-dialog, 200)" },
       BlurOverlay: { zIndex: "var(--fec-z-dialog, 200)" },
-      Panel: sx4(utilities3["fe-gap-3"], !overlay && noOverlayPosition)
+      Panel: sx3(utilities3["fe-gap-3"], !overlay && noOverlayPosition)
     }
   };
   return /* @__PURE__ */ jsxs(
@@ -466,7 +465,7 @@ function ConfirmDialog({
         /* @__PURE__ */ jsxs(
           "div",
           {
-            style: sx4(
+            style: sx3(
               utilities3["fe-d-flex"],
               utilities3["fe-justify-around"],
               utilities3["fe-w-100"]
@@ -506,7 +505,7 @@ function ActionList({ items, renderItem, getKey }) {
 }
 
 // src/components/Modal.jsx
-import { sx as sx5, utilities as utilities4 } from "@fraserelliott/fe-utilities";
+import { sx as sx4, utilities as utilities4 } from "@fraserelliott/fe-utilities";
 import { jsx as jsx6, jsxs as jsxs2 } from "react/jsx-runtime";
 function Modal({
   open,
@@ -539,7 +538,7 @@ function Modal({
     inline: {
       Overlay: { zIndex: "var(--fec-z-modal, 100)" },
       BlurOverlay: { zIndex: "var(--fec-z-modal, 100)" },
-      Panel: sx5(
+      Panel: sx4(
         utilities4["fe-p-2"],
         {
           width: "var(--fec-modal-w, clamp(320px, 80vw, 1536px))",
@@ -569,7 +568,7 @@ function Modal({
         /* @__PURE__ */ jsxs2(
           "div",
           {
-            style: sx5(
+            style: sx4(
               utilities4["fe-d-flex"],
               utilities4["fe-justify-between"],
               utilities4["fe-w-100"]
@@ -596,7 +595,7 @@ function Modal({
             children: /* @__PURE__ */ jsx6("div", { ...styleComponent("ModalInner"), children })
           }
         ),
-        renderBottomBtn && /* @__PURE__ */ jsx6("div", { style: sx5(utilities4["fe-d-flex"], utilities4["fe-justify-center"]), children: /* @__PURE__ */ jsx6(
+        renderBottomBtn && /* @__PURE__ */ jsx6("div", { style: sx4(utilities4["fe-d-flex"], utilities4["fe-justify-center"]), children: /* @__PURE__ */ jsx6(
           "button",
           {
             ...styleComponent("BtnPrimary"),
@@ -704,7 +703,7 @@ function useToast() {
 }
 
 // src/components/Toast/ToastMessageDisplay.jsx
-import { sx as sx6, utilities as utilities5 } from "@fraserelliott/fe-utilities";
+import { sx as sx5, utilities as utilities5 } from "@fraserelliott/fe-utilities";
 import { jsx as jsx8 } from "react/jsx-runtime";
 var positionStyleMap = {
   "bottom-right": {
@@ -745,9 +744,9 @@ function ToastMessageDisplay({
   noAnim
 }) {
   const { styleComponent } = useFEStyles(
-    sx6(defaultStyles, {
+    sx5(defaultStyles, {
       inline: {
-        ToastContainer: sx6(
+        ToastContainer: sx5(
           utilities5["fe-pos-fixed"],
           positionStyleMap[position],
           {
@@ -774,8 +773,64 @@ function ToastMessageDisplay({
     );
   }) });
 }
+
+// src/components/ActionTable.jsx
+import { jsx as jsx9, jsxs as jsxs3 } from "react/jsx-runtime";
+import { createElement } from "react";
+function ActionTable({
+  items,
+  getKey,
+  columns,
+  actions = [],
+  style,
+  className,
+  separateActionColumns,
+  showHeadersWhenEmpty
+}) {
+  const { styleComponent } = useFEStyles(defaultStyles, style, className);
+  const renderActionButton = (action, item) => /* @__PURE__ */ createElement(
+    "button",
+    {
+      ...styleComponent(action.buttonStyleSlot ?? "BtnPrimary"),
+      key: action.key,
+      onClick: () => {
+        var _a;
+        return (_a = action.onAction) == null ? void 0 : _a.call(action, item);
+      }
+    },
+    action.label
+  );
+  if (!items || items.length === 0 && !showHeadersWhenEmpty) return null;
+  return /* @__PURE__ */ jsxs3("table", { ...styleComponent("Table"), children: [
+    /* @__PURE__ */ jsx9("thead", { children: /* @__PURE__ */ jsxs3("tr", { children: [
+      columns.map((column) => /* @__PURE__ */ createElement(
+        "th",
+        {
+          ...styleComponent("TableCell"),
+          key: column.key ?? column.field
+        },
+        column.label
+      )),
+      actions.length > 0 && separateActionColumns && actions.map((action) => /* @__PURE__ */ createElement("th", { ...styleComponent("TableCell"), key: action.key }, action.label)),
+      actions.length > 0 && !separateActionColumns && /* @__PURE__ */ jsx9("th", { ...styleComponent("TableCell"), children: "Actions" })
+    ] }) }),
+    /* @__PURE__ */ jsx9("tbody", { children: items.map((item) => /* @__PURE__ */ jsxs3("tr", { children: [
+      columns.map((column) => /* @__PURE__ */ createElement(
+        "td",
+        {
+          ...styleComponent("TableCell"),
+          key: column.key ?? column.field
+        },
+        column.renderItem ? column.renderItem(item) : item[column.field]
+      )),
+      actions.length > 0 && separateActionColumns && actions.map((action) => /* @__PURE__ */ createElement("td", { ...styleComponent("TableCell"), key: action.key }, renderActionButton(action, item))),
+      actions.length > 0 && !separateActionColumns && /* @__PURE__ */ jsx9("td", { ...styleComponent("TableCell"), children: actions.map((action) => renderActionButton(action, item)) })
+    ] }, getKey(item))) })
+  ] });
+}
 export {
   ActionList,
+  ActionTable,
   ConfirmDialog,
   FEStyleProvider,
   FloatingPanel,
@@ -785,7 +840,6 @@ export {
   ToastMessageDisplay,
   ToastProvider,
   defaultStyles,
-  floatingPanelDefaultStyle,
   useFEStyles,
   useFocusManager,
   useToast

@@ -1,7 +1,7 @@
-import { floatingPanelDefaultStyle } from "./floatingpanelDefaultStyle";
-import { useFEStyles } from "../../styling/FEStyle";
+import { defaultStyles } from "../styling/defaultStyle";
+import { useFEStyles } from "../styling/FEStyle";
 import { useRef, useEffect } from "react";
-import { useFocusManager } from "../FocusManager";
+import { useFocusManager } from "./FocusManager";
 import { sx } from "@fraserelliott/fe-utilities/cx";
 
 /**
@@ -48,8 +48,15 @@ export function FloatingPanel({
   onOpenChange,
   defaultStyle = {},
 }) {
+  const overrides = {
+    inline: {
+      Panel: sx(S.inline.Panel, utilities["fe-pos-absolute"], {
+        zIndex: "var(--fec-z-floating-panel, 50)",
+      }),
+    },
+  };
   const { styleComponent } = useFEStyles(
-    sx(floatingPanelDefaultStyle, defaultStyle),
+    sx(defaultStyles, overrides, defaultStyle),
     style,
     className,
   );

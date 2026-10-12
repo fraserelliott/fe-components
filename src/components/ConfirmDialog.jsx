@@ -1,4 +1,4 @@
-import { FloatingPanel } from "./FloatingPanel/FloatingPanel";
+import { FloatingPanel } from "./FloatingPanel";
 import { useFEStyles } from "../styling/FEStyle";
 import { defaultStyles } from "../styling/defaultStyle";
 import { sx, utilities } from "@fraserelliott/fe-utilities";

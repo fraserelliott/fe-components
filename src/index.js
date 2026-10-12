@@ -6,3 +6,4 @@ export * from "./components/ConfirmDialog";
 export * from "./components/ActionList";
 export * from "./components/Modal";
 export * from "./components/Toast";
+export * from "./components/ActionTable";
