@@ -137,22 +137,24 @@ var FEStyleContext = createContext({
   theme: {}
 });
 function FEStyleProvider({ theme = {}, children }) {
+  console.log("theme:", theme);
   return /* @__PURE__ */ jsx(FEStyleContext.Provider, { value: { theme }, children });
 }
 function useFEStyles(defaultStyles2 = {}, baseStyle = {}, baseClassName = {}, noAnim = false) {
   const { theme } = useContext(FEStyleContext);
   const styleComponent = (slot, style = {}, className = "") => {
-    var _a, _b, _c, _d, _e, _f, _g;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _i;
     const styles2 = [];
     const classes = [];
     styles2.push((_a = defaultStyles2.inline) == null ? void 0 : _a[slot]);
+    const animClass = ((_c = (_b = theme.anim) == null ? void 0 : _b.anim) == null ? void 0 : _c[slot]) ?? ((_e = (_d = defaultStyles2.anim) == null ? void 0 : _d.anim) == null ? void 0 : _e[slot]) ?? "";
     if (noAnim) {
-      styles2.push((_c = (_b = defaultStyles2.anim) == null ? void 0 : _b.noAnim) == null ? void 0 : _c[slot]);
+      styles2.push((_g = (_f = defaultStyles2.anim) == null ? void 0 : _f.noAnim) == null ? void 0 : _g[slot]);
     } else {
-      classes.push((_e = (_d = defaultStyles2.anim) == null ? void 0 : _d.anim) == null ? void 0 : _e[slot]);
+      classes.push(animClass);
     }
-    styles2.push((_f = theme == null ? void 0 : theme.inline) == null ? void 0 : _f[slot], baseStyle == null ? void 0 : baseStyle[slot], style);
-    classes.push((_g = theme == null ? void 0 : theme.classes) == null ? void 0 : _g[slot], baseClassName == null ? void 0 : baseClassName[slot], className);
+    styles2.push((_h = theme == null ? void 0 : theme.inline) == null ? void 0 : _h[slot], baseStyle == null ? void 0 : baseStyle[slot], style);
+    classes.push((_i = theme == null ? void 0 : theme.classes) == null ? void 0 : _i[slot], baseClassName == null ? void 0 : baseClassName[slot], className);
     return feStyle(styles2, classes);
   };
   return { styleComponent };

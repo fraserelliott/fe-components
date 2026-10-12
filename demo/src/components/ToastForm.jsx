@@ -31,8 +31,8 @@ export function ToastForm({ title, type }) {
       >
         <label>Message:</label>
         <textarea
+          {...styleComponent("InputPrimary", { width: "300px" })}
           {...register("message", { required: true })}
-          style={{ width: "300px" }}
           rows="4"
         />
         <input type="submit" value="Submit" {...styleComponent("BtnPrimary")} />

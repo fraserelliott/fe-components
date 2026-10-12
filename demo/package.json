@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fraserelliott/fe-components": "^0.2.6",
+    "@fraserelliott/fe-slate": "^0.1.0",
     "@fraserelliott/fe-utilities": "^0.3.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

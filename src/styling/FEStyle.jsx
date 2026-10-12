@@ -6,6 +6,8 @@ const FEStyleContext = createContext({
 });
 
 export function FEStyleProvider({ theme = {}, children }) {
+  console.log("theme:", theme);
+
   return (
     <FEStyleContext.Provider value={{ theme }}>
       {children}
@@ -76,10 +78,13 @@ export function useFEStyles(
 
     styles.push(defaultStyles.inline?.[slot]);
 
+    const animClass =
+      theme.anim?.anim?.[slot] ?? defaultStyles.anim?.anim?.[slot] ?? "";
+
     if (noAnim) {
       styles.push(defaultStyles.anim?.noAnim?.[slot]);
     } else {
-      classes.push(defaultStyles.anim?.anim?.[slot]);
+      classes.push(animClass);
     }
 
     styles.push(theme?.inline?.[slot], baseStyle?.[slot], style);

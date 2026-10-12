@@ -38,7 +38,9 @@ export function Header() {
           style={({ isActive }) =>
             sx(
               navItemStyles.style,
-              isActive && { backgroundColor: "var(--fec-bg-active, #cfd8e3)" },
+              isActive && {
+                backgroundColor: "var(--fes-btn-primary, #64748b)",
+              },
             )
           }
           to={page.to}

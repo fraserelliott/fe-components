@@ -90,6 +90,7 @@ export function ModalPage() {
           closeOnEscape={closeOnEscape}
           showCloseButtons={showCloseButtons}
           overlay={overlay}
+          style={{ Panel: { width: "400px", height: "300px" } }}
         >
           <p>Modal Text</p>
           <button
