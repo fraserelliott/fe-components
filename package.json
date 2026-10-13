@@ -1,18 +1,18 @@
 {
   "name": "@fraserelliott/fe-components",
   "description": "Reusable React components",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "type": "module",
   "main": "./dist/index.js",
   "exports": {
-    ".": "./dist/index.js",
-    "./fe-components.css": "./src/styling/fe-components.css"
+  ".": "./dist/index.js",
+  "./fe-components.css": "./dist/fe-components.css"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && cp src/styling/fe-components.css dist/fe-components.css",
     "dev": "tsup src/index.js --format esm --watch",
     "prepublishOnly": "npm run build",
     "demo": "cd demo && npm run dev"
