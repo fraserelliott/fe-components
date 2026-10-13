@@ -31,6 +31,11 @@ export function FocusManagerProvider({ children }) {
     [getTopmost],
   );
 
+  /**
+   * Registers an element with the focus manager to trap keyboard focus within it.
+   *
+   * @param {HTMLElement} element - DOM element within which focus should be trapped.
+   */
   const trapComponent = useCallback((element) => {
     if (!element) return;
 
@@ -47,6 +52,11 @@ export function FocusManagerProvider({ children }) {
     (first ?? element).focus();
   }, []);
 
+  /**
+   * Removes an element from the focus manager's keyboard focus trapping.
+   *
+   * @param {HTMLElement} element - DOM element within which focus should no longer be trapped.
+   */
   const untrapComponent = useCallback((element) => {
     const index = stack.current.findIndex((entry) => entry.element === element);
 

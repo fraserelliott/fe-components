@@ -1,421 +1,615 @@
 # fe-components
 
-A small set of reusable UI components designed to work cleanly with a utility-class workflow.
+A lightweight collection of reusable React components, hooks, and providers with a flexible, theme-aware styling system.
 
-- Neutral, functional defaults
-- Simple override patterns for styling
-- Designed to be easy to integrate in real projects (and easy to restyle)
+Designed for use independently or alongside `@fraserelliott/fe-utilities` and `@fraserelliott/fe-slate`.
 
-## Install
+View the live demo at https://fraserelliott.github.io/fe-components/
+
+---
+
+## Overview
+
+`fe-components` provides reusable UI components and application helpers without enforcing a particular visual design.
+
+The library focuses on:
+
+- **Reusability** – components that can be shared across different applications.
+- **Customisation** – slot-based styling with inline styles and CSS classes.
+- **Optional theming** – neutral defaults that can be replaced or extended by a theme.
+- **Separation of concerns** – reusable component behaviour without application-specific business logic.
+- **Composition** – smaller primitives that support more specialised components.
+
+Components can be used with their default appearance, styled individually, or themed across an entire application.
+
+---
+
+## Installation
 
 ```bash
-npm i @fraserelliott/fe-components
+npm install @fraserelliott/fe-components
 ```
 
-> If your project uses React, you’ll obviously need `react` and `react-dom` installed already.
+The library uses React and relies on the styling utilities provided by `@fraserelliott/fe-utilities`.
 
-## Compatibility / Notes
+For the optional Slate dark theme:
 
-This library is tested primarily with:
-
-- React (Vite + React Router)
-- JavaScript / JSX
-- Utility-class styling (e.g. `fe-*` utilities)
-
-It should work fine in other React setups too. If something behaves unexpectedly in your stack, please raise an issue with a minimal repro.
-
-## Demo
-
-A live demo showcasing the available components, default styling, and typical integration patterns is available here:
-
-👉 **[View Demo](https://fraserelliott.github.io/fe-components/)**
-
-The demo uses the library exactly as it would be used in a real project with the default styles. It’s intended to serve as:
-
-- a reference implementation
-- a quick way to explore the components before integrating them
-- a baseline for testing style overrides locally if you want to experiment
-
-### Portals and SSR
-
-Some components are designed to work well with portals (e.g. rendering to `document.body`).
-If you are using SSR/SSG, avoid accessing `document` during server render — pass the portal target only on the client (or guard it with `typeof document !== "undefined"`).
-
-## Styling and Overrides
-
-Most components accept a `style` prop which is a map of **named style slots** (e.g. `Panel`, `Heading`, etc).
-
-Each slot can be **one of two things**:
-
-1. A **string** of class names (including template literals / expressions)
-2. A **zero-argument function** that returns a string
-
-Why allow functions? Mostly ergonomics: it makes composing and reusing style helpers easier without needing to remember `()` everywhere.
+```bash
+npm install @fraserelliott/fe-slate
+```
 
 ---
 
-### One-off overrides
+## Styling system
 
-Override a single part of a component without needing to rewrite the full default styling:
+The styling system is built around `FEStyleProvider` and `useFEStyles`.
 
-```jsx
-<ConfirmDialog
-  style={{
-    BtnConfirm: "fe-fw-bold",
-    Heading: "fe-fs-lg",
-  }}
-/>
-```
+Each component defines its own default styles, while a theme or consuming application can override individual styling slots.
 
-### Composable overrides with `cx`
+### FEStyleProvider
 
-This library pairs naturally with my utility-class library [fe-utilities](https://github.com/fraserelliott/fe-utilities), which explains the styling approach in more detail. It isn’t required, but the components are designed with that workflow in mind.
-
-If you prefer a “single source of styles” for your project, define an appearance object using the same slot names as the components. Anything unused is simply ignored.
-
-**Tip:** Keep layout and appearance conceptually separate. Defaults provide layout; your overrides usually provide colours, borders, shadows, and typography.
-
-Example:
-
-```js
-// app/styles/appearance.js
-export const appAppearance = {
-  Panel: "app-bg app-shadow app-radius",
-  BtnSuccess: "app-btn app-btn-confirm",
-  BtnDanger: "app-btn app-btn-cancel",
-};
-```
-
-Then in your component usage:
+`FEStyleProvider` makes a theme available to descendant components.
 
 ```jsx
-<ConfirmDialog style={appAppearance} />
-```
+import { FEStyleProvider } from "@fraserelliott/fe-components";
+import { feSlateTheme } from "@fraserelliott/fe-slate";
+import "@fraserelliott/fe-slate/fe-slate.css";
 
-You can also create component-specific “skins” if needed, but many projects work well with a single shared appearance object.
-
-The library defaults aim to be neutral and predictable.
-Overrides exist so you can match your own branding without fighting the component internals.
-
----
-
-## 🎨 Theming Tokens
-
-All visual aspects of `fe-components` can be customised by overriding the following CSS variables If not defined, the values below are used as fallbacks.
-
-```css
-:root {
-  --fec-bg-primary: #111;
-  --fec-text-primary: #eee;
-  --fec-confirm: #00c853;
+function App() {
+  return (
+    <FEStyleProvider theme={feSlateTheme}>
+      <MyApplication />
+    </FEStyleProvider>
+  );
 }
 ```
 
----
+The provider is optional. Without it, components use their own default styling.
 
-### Backgrounds
+### useFEStyles
 
-| Variable             | Default   | Used For                |
-| -------------------- | --------- | ----------------------- |
-| `--fec-bg-primary`   | `#f6f6f3` | Primary app background  |
-| `--fec-bg-secondary` | `#ecece7` | Secondary surface       |
-| `--fec-bg-panel`     | `#ffffff` | Panel / card background |
-| `--fec-btn-primary`  | `#f6f6f3` | Primary button colour   |
-| `--fec-bg-active`    | `#cfd8e3` | Hover / active states   |
+`useFEStyles` composes component defaults, theme styles, consumer overrides, and local overrides.
 
----
+```jsx
+import { useFEStyles } from "@fraserelliott/fe-components";
 
-### Text
+function MyButton({
+  children,
+  style = {},
+  className = {},
+  noAnim = false,
+}) {
+  const defaultStyles = {
+    inline: {
+      BtnPrimary: {
+        padding: "0.5rem 1rem",
+        borderRadius: "0.5rem",
+      },
+    },
+    anim: {
+      anim: {
+        BtnPrimary: "my-button",
+      },
+    },
+  };
 
-| Variable               | Default   | Used For   |
-| ---------------------- | --------- | ---------- |
-| `--fec-text-primary`   | `#1f1f1f` | Main text  |
-| `--fec-text-secondary` | `#5a5a5a` | Muted text |
+  const { styleComponent } = useFEStyles(
+    defaultStyles,
+    style,
+    className,
+    noAnim
+  );
 
----
+  return (
+    <button {...styleComponent("BtnPrimary")}>
+      {children}
+    </button>
+  );
+}
+```
 
-### Semantic Colours
+`styleComponent` returns an object containing `style` and `className`, ready to spread onto a React element.
 
-| Variable        | Default   | Used For                  |
-| --------------- | --------- | ------------------------- |
-| `--fec-confirm` | `#4caf50` | Success / confirm actions |
-| `--fec-danger`  | `#d9534f` | Danger / error actions    |
+### Styling slots
 
----
+Components expose named styling slots corresponding to their internal elements or semantic roles.
 
-### Borders
+For example, a modal's panel can be customised without affecting the rest of the component:
 
-| Variable             | Default   | Used For              |
-| -------------------- | --------- | --------------------- |
-| `--fec-border-width` | `1px`     | Default border width  |
-| `--fec-border-style` | `solid`   | Default border style  |
-| `--fec-border-color` | `#d6d6d0` | Default border colour |
+```jsx
+<Modal
+  open={isOpen}
+  onOpenChange={setIsOpen}
+  style={{
+    Panel: {
+      width: "400px",
+      height: "300px",
+    },
+  }}
+>
+  Modal content
+</Modal>
+```
 
----
+The `style` and `className` props are objects keyed by slot name, rather than ordinary single-element React style props.
 
-### Shadows
+### Style precedence
 
-| Variable              | Default                                                   |
-| --------------------- | --------------------------------------------------------- |
-| `--fec-shadow-soft`   | `0 1px 2px rgba(0,0,0,0.05), 0 3px 6px rgba(0,0,0,0.06)`  |
-| `--fec-shadow-medium` | `0 4px 8px rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.06)` |
+Inline styles are composed in the following order, with later values taking precedence:
 
----
+1. Component default styles.
+2. Static no-animation styles, when `noAnim` is enabled.
+3. Theme inline styles.
+4. Consumer-provided slot styles.
+5. Local overrides supplied to `styleComponent`.
 
-### Toast Positioning
+Styles are merged using `sx` from `fe-utilities`, supporting nested objects and property removal with `null`.
 
-| Variable              | Default | Used For                      |
-| --------------------- | ------- | ----------------------------- |
-| `--fec-toast-inset-x` | `1rem`  | Horizontal distance from edge |
-| `--fec-toast-inset-y` | `3rem`  | Vertical distance from edge   |
+### Animations and interactive styling
 
----
+Interactive appearance, including hover and active states, is handled through CSS classes.
 
-### Dialog Sizing
+Themes can replace a component's default animation classes for a particular slot, preventing conflicting CSS rules.
 
-| Variable         | Default                     |
-| ---------------- | --------------------------- |
-| `--fec-dialog-w` | `clamp(300px, 60vw, 400px)` |
-| `--fec-dialog-h` | `clamp(200px, 60vh, 300px)` |
+The `noAnim` option suppresses these classes and allows static appearance styles to be used instead.
 
----
+### Theme structure
 
-### Modal Sizing
+A theme uses the following structure:
 
-| Variable        | Default                      |
-| --------------- | ---------------------------- |
-| `--fec-modal-w` | `clamp(320px, 80vw, 1536px)` |
-| `--fec-modal-h` | `clamp(240px, 80vh, 864px)`  |
+```javascript
+const theme = {
+  inline: {
+    Panel: {
+      backgroundColor: "#1e293b",
+      color: "#f1f5f9",
+    },
+  },
+  anim: {
+    anim: {
+      BtnPrimary: "custom-button",
+    },
+    noAnim: {
+      BtnPrimary: {
+        backgroundColor: "#64748b",
+      },
+    },
+  },
+};
+```
+
+The `inline` section defines slot-based inline styles.
+
+The `anim.anim` section defines interactive CSS classes, while `anim.noAnim` provides static styles for components using `noAnim`.
 
 ---
 
 ## Components
 
-### OptionalPortal
+### ToastProvider, useToast and ToastMessageDisplay
 
-A tiny utility wrapper that conditionally renders children inside a React portal.
+A lightweight toast notification system for displaying temporary messages.
 
-Useful when a component _can_ use a portal (to avoid stacking / z-index issues), but you want consumers to control it.
-
-**Example:**
-
-```jsx
-import { OptionalPortal } from "@fraserelliott/fe-components";
-
-<OptionalPortal portalTarget={document.body}>
-  <div>Rendered in document.body</div>
-</OptionalPortal>;
-```
-
-If you don’t provide a portal target, it behaves like a normal wrapper (renders in place).
-
----
-
-### Toast
-
-A lightweight notification system for transient feedback messages. Uses React context so messages can be triggered from anywhere in your app.
-
-Supports:
-
-- multiple toast types (e.g. neutral / success / error)
-- stacking
-- fade-out
-- styling overrides via named style slots
-
-**Typical setup:**
-
-1. Add ToastProvider near the root of your app.
-
-```jsx
-import { ToastProvider } from "@fraserelliott/fe-components";
-
-<ToastProvider>
-  <App />
-</ToastProvider>;
-```
-
-2. Render the display (often in a portal):
+`ToastProvider` manages notification state and timing, `useToast` exposes the notification controls, and `ToastMessageDisplay` renders the active messages.
 
 ```jsx
 import {
-  OptionalPortal,
+  ToastProvider,
   ToastMessageDisplay,
+  useToast,
 } from "@fraserelliott/fe-components";
 
-<OptionalPortal portalTarget={document.body}>
-  <ToastMessageDisplay />
-</OptionalPortal>;
+function SaveButton() {
+  const { addToastMessage } = useToast();
+
+  return (
+    <button
+      onClick={() =>
+        addToastMessage("Saved successfully", "success")
+      }
+    >
+      Save
+    </button>
+  );
+}
+
+function App() {
+  return (
+    <ToastProvider fadeMs={150} defaultDelayMs={2350}>
+      <SaveButton />
+      <ToastMessageDisplay position="bottom-right" />
+    </ToastProvider>
+  );
+}
 ```
 
-3. Trigger toasts via the toast API exposed by the library.
+`addToastMessage(message, type, delayMs)` creates a notification.
 
-```js
-import { useToast } from "@fraserelliott/fe-components";
+The `"success"` and `"error"` types receive dedicated styling. Other type strings use the default appearance.
 
-const { addToastMessage } = useToast();
-addToastMessage("Saved successfully", "success");
-addToastMessage("Something went wrong", "error", 2000);
+`ToastMessageDisplay` supports:
+
+- `position` – `"bottom-right"`, `"bottom-left"`, `"top-right"` or `"top-left"`.
+- `direction` – `"column"` or `"column-reverse"`.
+- `clearOnClick` – allows messages to be dismissed by clicking them.
+- `style`, `className`, `noAnim` – styling controls.
+
+---
+
+### ActionList
+
+A simple list component that delegates item rendering to the consumer.
+
+It makes no assumptions about the structure of each item or what actions should be available.
+
+```jsx
+import { ActionList } from "@fraserelliott/fe-components";
+
+<ActionList
+  items={tasks}
+  getKey={(task) => task.id}
+  renderItem={(task) => (
+    <label>
+      <input type="checkbox" checked={task.complete} readOnly />
+      {task.title}
+    </label>
+  )}
+/>
 ```
+
+The component renders a list using the supplied `renderItem` function.
+
+Use `ActionList` when the content or behaviour of each list item is application-specific.
+
+---
+
+### ActionTable
+
+A configurable table component for displaying structured data with optional row actions.
+
+```jsx
+import { ActionTable } from "@fraserelliott/fe-components";
+
+<ActionTable
+  items={people}
+  getKey={(person) => person.id}
+  columns={[
+    { field: "firstName", label: "First name" },
+    { field: "surname", label: "Surname" },
+    {
+      field: "dob",
+      label: "Date of birth",
+      renderItem: (person) =>
+        new Date(person.dob).toLocaleDateString(),
+    },
+  ]}
+  actions={[
+    {
+      key: "delete",
+      label: "Delete",
+      buttonStyleSlot: "BtnDanger",
+      onAction: (person) => deletePerson(person.id),
+    },
+  ]}
+/>
+```
+
+**Key props:**
+
+- `items` – array of records to display.
+- `getKey` – returns a unique key for each record.
+- `columns` – defines fields, headings, and optional custom renderers.
+- `actions` – defines buttons and callbacks for each row.
+- `separateActionColumns` – displays actions in individual columns instead of grouping them.
+- `showHeadersWhenEmpty` – controls whether headers remain visible with no data.
+- `style`, `className` – slot-based styling overrides.
+
+Column renderers receive the complete item, allowing derived values and custom cell content.
+
+Actions can specify a styling slot such as `BtnPrimary` or `BtnDanger`.
+
+---
+
+### ApiProvider and useApi
+
+A small API request abstraction providing consistent success handling, error handling, and optional centralised HTTP 401 handling.
+
+```jsx
+import {
+  ApiProvider,
+  useApi,
+} from "@fraserelliott/fe-components";
+
+function App() {
+  return (
+    <ApiProvider
+      onError={(err, fallbackMsg) => {
+        console.error(
+          err?.response?.data?.error ??
+          err?.message ??
+          fallbackMsg
+        );
+      }}
+      onUnauthorised={(err) => {
+        // Application-specific authentication handling
+      }}
+    >
+      <MyApplication />
+    </ApiProvider>
+  );
+}
+```
+
+The provider exposes two request helpers.
+
+**runApiCallback**
+
+Executes an API request and optionally invokes success or error callbacks.
+
+```javascript
+const { runApiCallback } = useApi();
+
+await runApiCallback(
+  api.get("/items"),
+  (data) => setItems(data),
+  "Failed to load items"
+);
+```
+
+Signature:
+
+```javascript
+runApiCallback(promise, onSuccess, fallbackMsg, onErrorOverride)
+```
+
+Returns response data on success or `null` on a handled request failure.
+
+**runApiTransform**
+
+Executes a request and returns either the response data or a transformed result.
+
+```javascript
+const { runApiTransform } = useApi();
+
+const items = await runApiTransform(
+  api.get("/items"),
+  (data) => data.items,
+  (err) => []
+);
+```
+
+Signature:
+
+```javascript
+runApiTransform(
+  promise,
+  successTransform,
+  errorTransform,
+  handleUnauthorised = true
+)
+```
+
+Without transforms, it returns the response data on success or the original error on failure.
+
+When `onUnauthorised` is provided, HTTP 401 responses take precedence over normal error handling. This can be disabled for individual `runApiTransform` calls by passing `false` as the fourth argument.
+
+The provider does not depend on a particular HTTP client, toast system, or authentication implementation. Its request helpers expect promises resolving to objects containing a `data` property, such as Axios responses.
+
+---
+
+### FloatingPanel
+
+A reusable floating container with optional overlay, focus trapping, and dismissal behaviour.
+
+It acts as a foundation for higher-level components such as `Modal` and `ConfirmDialog`.
+
+```jsx
+import { FloatingPanel } from "@fraserelliott/fe-components";
+
+<FloatingPanel
+  open={isOpen}
+  onOpenChange={setIsOpen}
+  overlay="blur"
+  trapFocus
+  closeOnEscape
+  closeOnOverlayClick
+>
+  <p>Floating panel content</p>
+</FloatingPanel>
+```
+
+**Key props:**
+
+- `open` – controls visibility.
+- `onOpenChange` – receives requested visibility changes.
+- `overlay` – `false`, `true`, or `"blur"`.
+- `trapFocus` – keeps keyboard focus within the panel.
+- `closeOnEscape` – allows Escape to request closure.
+- `closeOnOverlayClick` – allows clicking outside the panel to request closure.
+- `style`, `className`, `defaultStyle`, `noAnim` – styling controls.
+
+Use `FloatingPanel` when you need the underlying floating-container behaviour without the additional structure of a dialog.
 
 ---
 
 ### ConfirmDialog
 
-A flexible modal dialog component for confirmation flows.
-
-Provides structured callbacks such as:
-
-- `onConfirm`
-- `onCancel`
-- `onOpenChange`
-- `onError`
-
-Designed to be:
-
-- neutral by default
-- easy to restyle
-- predictable in behaviour
-
-**Example:**
+A confirmation dialog built on `FloatingPanel`, supporting asynchronous confirmation and cancellation callbacks.
 
 ```jsx
-import { ConfirmDialog, OptionalPortal } from "@fraserelliott/fe-components";
-import { useState } from "react";
+import { ConfirmDialog } from "@fraserelliott/fe-components";
 
-export function Example() {
-  const [open, setOpen] = useState(false);
+<ConfirmDialog
+  open={showConfirm}
+  onOpenChange={setShowConfirm}
+  heading="Delete item?"
+  text="This action cannot be undone."
+  confirmLabel="Delete"
+  cancelLabel="Cancel"
+  onConfirm={async () => {
+    await deleteItem();
+  }}
+  onCancel={() => {
+    setShowConfirm(false);
+  }}
+/>
+```
 
-  const onOpenChange = (isOpen, reason) => {
-    setOpen(isOpen);
-    // optionally log reason
-  };
+**Key props:**
 
+- `open`, `onOpenChange` – visibility control.
+- `heading`, `text` – dialog content.
+- `confirmLabel`, `cancelLabel` – button labels.
+- `onConfirm`, `onCancel` – action callbacks.
+- `overlay`, `trapFocus` – overlay and focus behaviour.
+- `closeOnEscape`, `closeOnOverlayClick` – optional dismissal behaviour.
+- `style`, `className`, `noAnim` – styling controls.
+
+Callbacks can return promises, allowing the dialog to handle asynchronous operations.
+
+---
+
+### Modal
+
+A general-purpose modal dialog built on `FloatingPanel`.
+
+It provides a heading, content area, and configurable close controls.
+
+```jsx
+import { Modal } from "@fraserelliott/fe-components";
+
+<Modal
+  open={isOpen}
+  onOpenChange={setIsOpen}
+  heading="Edit item"
+  showCloseButtons="both"
+>
+  <EditForm />
+</Modal>
+```
+
+**Key props:**
+
+- `open`, `onOpenChange` – visibility control.
+- `heading` – modal heading.
+- `children` – modal body content.
+- `showCloseButtons` – `"corner"`, `"bottom"`, `"both"`, or `false`.
+- `disableCloseButtons` – disables the close controls.
+- `overlay`, `trapFocus` – overlay and focus behaviour.
+- `closeOnEscape`, `closeOnOverlayClick` – optional dismissal behaviour.
+- `style`, `className`, `noAnim` – styling controls.
+
+Use `Modal` for forms, detailed content, and other interactions requiring a dedicated overlay.
+
+---
+
+### FocusManagerProvider and useFocusManager
+
+Provides shared focus management for components that need to trap keyboard focus.
+
+It is particularly useful for modal interfaces, including nested dialogs.
+
+The focus manager supports registering focus-trapped elements, handling the active focus trap, and restoring focus when an element is dismissed.
+
+```jsx
+import { FocusManagerProvider } from "@fraserelliott/fe-components";
+
+function App() {
   return (
-    <>
-      <button onClick={() => setOpen(true)}>Open Dialog</button>
-
-      <OptionalPortal portalTarget={document.body}>
-        <ConfirmDialog
-          open={open}
-          onOpenChange={onOpenChange}
-          onConfirm={() => console.log("confirm")}
-          onCancel={() => console.log("cancel")}
-          onError={(err) => console.log("error", err)}
-          heading="Confirm Dialog Demo"
-          text="Select option to add to log."
-        />
-      </OptionalPortal>
-    </>
+    <FocusManagerProvider>
+      <MyApplication />
+    </FocusManagerProvider>
   );
 }
 ```
 
----
+The `useFocusManager` hook exposes the focus management functionality to components within the provider.
 
-## Modal
-
-A flexible container component for rendering custom modal content.
-
-Unlike `ConfirmDialog`, `Modal` is unopinionated and simply renders children inside an overlay panel. It is designed to be:
-
-- composable
-- predictable
-- neutral by default
-- easy to restyle via `style` overrides
-
-### Features
-
-- Controlled open state via `open` + `onOpenChange`
-- Optional backdrop click closing
-- Optional Escape key closing
-- Optional persistent mounting via `keepMounted`
-- Fully custom content via `children`
+Components such as `FloatingPanel` can use this functionality when `trapFocus` is enabled.
 
 ---
 
-### Props
+### OptionalPortal
 
-| Prop                   | Type                        | Default     | Description                            |
-| ---------------------- | --------------------------- | ----------- | -------------------------------------- |
-| `open`                 | `boolean`                   | —           | Controls whether the modal is visible  |
-| `onOpenChange`         | `(isOpen: boolean) => void` | —           | Called when modal requests to close    |
-| `heading`              | `string`                    | `undefined` | Optional heading text                  |
-| `closeOnEscape`        | `boolean`                   | `true`      | Closes modal when Escape is pressed    |
-| `closeOnBackdropClick` | `boolean`                   | `true`      | Closes modal when clicking the overlay |
-| `keepMounted`          | `boolean`                   | `false`     | Keeps modal mounted when closed        |
-| `style`                | `object`                    | —           | Optional style override object         |
-| `children`             | `ReactNode`                 | —           | Custom modal content                   |
+A small utility component for conditionally rendering content through a React portal.
+
+Useful when a component should sometimes render outside its normal DOM hierarchy without requiring separate implementations.
+
+It can be used to support overlays and other UI elements that need to escape ancestor layout or stacking constraints.
 
 ---
 
-### Example
+## Recommended provider setup
+
+For applications using theming, focus management, API helpers, and toast notifications, the providers can be composed near the application root.
 
 ```jsx
-import { Modal, OptionalPortal } from "@fraserelliott/fe-components";
-import { useState } from "react";
+import {
+  FEStyleProvider,
+  FocusManagerProvider,
+  ToastProvider,
+  ToastMessageDisplay,
+  ApiProvider,
+} from "@fraserelliott/fe-components";
 
-export function Example() {
-  const [open, setOpen] = useState(false);
+import { feSlateTheme } from "@fraserelliott/fe-slate";
+import "@fraserelliott/fe-slate/fe-slate.css";
 
+function Root() {
   return (
-    <>
-      <button onClick={() => setOpen(true)}>Open Modal</button>
-
-      <OptionalPortal portalTarget={document.body}>
-        <Modal
-          open={open}
-          onOpenChange={setOpen}
-          heading="Modal Demo"
-          closeOnEscape
-          closeOnBackdropClick
-        >
-          <p>This content is fully custom.</p>
-          <input placeholder="Focusable input" />
-        </Modal>
-      </OptionalPortal>
-    </>
+    <FEStyleProvider theme={feSlateTheme}>
+      <FocusManagerProvider>
+        <ToastProvider>
+          <ApiProvider>
+            <App />
+          </ApiProvider>
+          <ToastMessageDisplay />
+        </ToastProvider>
+      </FocusManagerProvider>
+    </FEStyleProvider>
   );
 }
 ```
 
----
+Only include the providers required by your application.
 
-### Behaviour Notes
-
-- Clicking inside the panel will not close the modal.
-- Backdrop clicks only close when `closeOnBackdropClick` is `true`.
-- Escape only closes when `closeOnEscape` is `true`.
-- `keepMounted` prevents unmounting when closed (useful for preserving internal state).
+For the Slate theme's application-wide background and typography, the `fes-app` class can also be applied to the document body.
 
 ---
 
-### When to Use
+## Related packages
 
-Use `Modal` when you need:
+| Package | Purpose |
+|---|---|
+| `@fraserelliott/fe-utilities` | JavaScript style composition and structural layout utilities |
+| `@fraserelliott/fe-slate` | Dark theme tokens, CSS classes, and `feSlateTheme` |
+| `@fraserelliott/fe-components` | React components, providers, hooks, and styling integration |
 
-- fully custom layouts
-- forms inside a dialog
-- multi-step flows
-- reusable modal shells
-
-Use `ConfirmDialog` when you need:
-
-- structured confirm/cancel behaviour
-- consistent confirmation flows
-- built-in intent handling
+The packages are designed to complement one another while retaining distinct responsibilities.
 
 ---
 
-## Reporting issues
+## Design philosophy
 
-If something doesn’t work as expected, please open an issue with:
+`fe-components` aims to provide reusable behaviour without forcing application-specific decisions.
 
-- your React version
-- your bundler (Vite / Webpack / etc.)
-- a minimal reproducible example
+Components define sensible defaults but expose configuration for appearance and interaction.
+
+The styling system separates component structure, theme appearance, and consumer overrides so that the same components can be reused across projects with different visual identities.
+
+The library deliberately avoids becoming a complete application framework or state-management solution.
 
 ---
 
-## License
+## Summary
 
-MIT
+`fe-components` provides a collection of reusable React building blocks, including:
+
+- Toast notifications and dialogs.
+- Flexible lists and tables.
+- API request helpers.
+- Floating panels and focus management.
+- Conditional portals.
+- A shared, slot-based styling system.
+
+Use components individually with their defaults, customise them through their styling slots, or apply a shared theme with `FEStyleProvider`.

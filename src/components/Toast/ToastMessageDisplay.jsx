@@ -34,6 +34,18 @@ const positionStyleMap = {
   },
 };
 
+/**
+ * Displays toast notifications from ToastProvider.
+ *
+ * @param {Object} props
+ * @param {Object<string, React.CSSProperties>} [props.style={}] - Style overrides keyed by component slot.
+ * @param {Object<string, string>} [props.className={}] - CSS class overrides keyed by component slot.
+ * @param {"bottom-right"|"bottom-left"|"top-right"|"top-left"} [props.position="bottom-right"] - Position of the toast container.
+ * @param {"column"|"column-reverse"} [props.direction="column-reverse"] - Direction in which toast messages are stacked.
+ * @param {boolean} [props.clearOnClick=false] - Whether clicking a toast dismisses it.
+ * @param {boolean} [props.noAnim=false] - Disables interactive styling and animations.
+ * @returns {React.JSX.Element}
+ */
 export function ToastMessageDisplay({
   style = {},
   className = {},

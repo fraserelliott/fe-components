@@ -11,6 +11,15 @@ import { v4 as uuid } from "uuid";
 
 const ToastContext = createContext();
 
+/**
+ * Provides toast notification state and controls to descendant components.
+ *
+ * @param {Object} props
+ * @param {React.ReactNode} props.children - Components that can access the toast context.
+ * @param {number} [props.fadeMs=150] - Duration of the toast fade-out animation in milliseconds.
+ * @param {number} [props.defaultDelayMs=2350] - Default time in milliseconds before a toast begins dismissing.
+ * @returns {React.JSX.Element}
+ */
 export function ToastProvider({
   children,
   fadeMs = 150,
@@ -74,6 +83,13 @@ export function ToastProvider({
     [startFadeAndScheduleRemove],
   );
 
+  /**
+   * Adds a toast notification with an optional dismissal delay.
+   *
+   * @param {string} message - Message to display.
+   * @param {string} type - Toast type. "success" and "error" have dedicated styling; any other string uses the default appearance.
+   * @param {number} [delayMs=defaultDelayMs] - Time in milliseconds before automatic dismissal.
+   */
   const addToastMessage = useCallback(
     (message, type, delayMs = defaultDelayMs) => {
       const id = uuid();

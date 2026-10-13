@@ -11,9 +11,9 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-    "@fraserelliott/fe-components": "^0.2.6",
-    "@fraserelliott/fe-slate": "^0.1.0",
-    "@fraserelliott/fe-utilities": "^0.3.0",
+    "@fraserelliott/fe-components": "^0.4.0",
+    "@fraserelliott/fe-slate": "^0.2.1",
+    "@fraserelliott/fe-utilities": "^0.4.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.90.0",

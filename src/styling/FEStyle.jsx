@@ -5,6 +5,14 @@ const FEStyleContext = createContext({
   theme: {},
 });
 
+/**
+ * Provides a shared theme configuration to descendant components using useFEStyles.
+ *
+ * @param {Object} props
+ * @param {Object} [props.theme={}] - Theme configuration containing slot-based inline styles and animation settings.
+ * @param {React.ReactNode} props.children - Components that can access the theme context.
+ * @returns {React.JSX.Element}
+ */
 export function FEStyleProvider({ theme = {}, children }) {
   return (
     <FEStyleContext.Provider value={{ theme }}>

@@ -2,6 +2,15 @@ import { useCallback, createContext, useContext, useMemo } from "react";
 
 const ApiContext = createContext(undefined);
 
+/**
+ * Provides API request helpers and centralised error handling to descendant components.
+ *
+ * @param {Object} props
+ * @param {React.ReactNode} props.children - Components that can access the API context.
+ * @param {(err: any, fallbackMsg?: string) => void} [props.onError] - Default error handler when a request has no error override.
+ * @param {(err: any) => void} [props.onUnauthorised] - Handles HTTP 401 errors, taking precedence over other error handlers unless explicitly disabled.
+ * @returns {React.JSX.Element}
+ */
 export function ApiProvider({ children, onError, onUnauthorised }) {
   const tryHandleUnauthorised = useCallback(
     (err) => {
@@ -15,6 +24,15 @@ export function ApiProvider({ children, onError, onUnauthorised }) {
     [onUnauthorised],
   );
 
+  /**
+   * Executes an API request and invokes callbacks based on its result.
+   *
+   * @param {Promise<{data: any}>} promise - API request promise.
+   * @param {(data: any) => void} [onSuccess] - Callback invoked with the response data on success.
+   * @param {string} [fallbackMsg] - Fallback error message passed to the provider's default error handler.
+   * @param {(err: any) => void} [onErrorOverride] - Request-specific error handler that overrides the provider's default handler, but not its 401 handler.
+   * @returns {Promise<any|null>} Response data on success, or null on failure.
+   */
   const runApiCallback = useCallback(
     async (promise, onSuccess, fallbackMsg, onErrorOverride) => {
       let data;
@@ -38,6 +56,15 @@ export function ApiProvider({ children, onError, onUnauthorised }) {
     [tryHandleUnauthorised],
   );
 
+  /**
+   * Executes an API request and transforms its success or error result.
+   *
+   * @param {Promise<{data: any}>} promise - API request promise.
+   * @param {(data: any) => any} [successTransform] - Transforms the response data on success.
+   * @param {(err: any) => any} [errorTransform] - Transforms the error on failure. Defaults to returning the original error.
+   * @param {boolean} [handleUnauthorised=true] - Whether to invoke the provider's 401 handler when available.
+   * @returns {Promise<any>} The transformed result, original data or error, or null if a 401 was handled.
+   */
   const runApiTransform = useCallback(
     async (
       promise,
