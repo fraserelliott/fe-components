@@ -1,18 +1,23 @@
-import { Modal, OptionalPortal } from "@fraserelliott/fe-components";
-import { UI } from "@styles";
+import {
+  Modal,
+  OptionalPortal,
+  useFEStyles,
+  defaultStyles,
+} from "@fraserelliott/fe-components";
 import { useState } from "react";
-import { useToast, ToastMessageDisplay } from "@fraserelliott/fe-components";
+import { utilities, sx } from "@fraserelliott/fe-utilities";
 
 export function ModalPage() {
   const [showModal, setShowModal] = useState(false);
   const [closeOnEscape, setCloseOnEscape] = useState(true);
-  const [closeOnBackdropClick, setCloseOnBackdropClick] = useState(true);
-  const [removeCloseButton, setRemoveCloseButton] = useState(false);
-  const { addToastMessage } = useToast();
+  const [showCloseButtons, setShowCloseButtons] = useState(false);
+  const [closeOnOverlayClick, setCloseOnOverlayClick] = useState(true);
+  const [overlay, setOverlay] = useState("blur");
+  const { styleComponent } = useFEStyles(defaultStyles);
 
   return (
-    <div className={UI.Panel("fe-d-flex fe-flex-column fe-gap-2")}>
-      <div className="fe-d-flex fe-justify-center">
+    <div {...styleComponent("Panel", utilities["fe-gap-2"])}>
+      <div style={sx(utilities["fe-d-flex"], utilities["fe-justify-center"])}>
         <label>Close on escape</label>
         <input
           type="checkbox"
@@ -25,21 +30,54 @@ export function ModalPage() {
         <label>Close on backdrop click</label>
         <input
           type="checkbox"
-          onChange={(e) => setCloseOnBackdropClick(e.target.checked)}
-          checked={closeOnBackdropClick}
+          onChange={(e) => setCloseOnOverlayClick(e.target.checked)}
+          checked={closeOnOverlayClick}
         />
       </div>
 
       <div className="fe-d-flex fe-justify-center">
-        <label>Remove close button</label>
-        <input
-          type="checkbox"
-          onChange={(e) => setRemoveCloseButton(e.target.checked)}
-          checked={removeCloseButton}
-        />
+        <label htmlFor="overlay">Overlay</label>
+        <select
+          id="overlay"
+          value={String(overlay)}
+          onChange={(e) =>
+            setOverlay(
+              e.target.value === "true"
+                ? true
+                : e.target.value === "false"
+                  ? false
+                  : e.target.value,
+            )
+          }
+        >
+          <option value="false">False</option>
+          <option value="true">True</option>
+          <option value="blur">Blur</option>
+        </select>
       </div>
 
-      <button onClick={() => setShowModal(true)} className={UI.BtnPrimary()}>
+      <div className="fe-d-flex fe-justify-center">
+        <label htmlFor="close-buttons">Show close button</label>
+        <select
+          id="close-buttons"
+          value={String(showCloseButtons)}
+          onChange={(e) =>
+            setShowCloseButtons(
+              e.target.value === "false" ? false : e.target.value,
+            )
+          }
+        >
+          <option value="false">False</option>
+          <option value="corner">Corner</option>
+          <option value="bottom">Bottom</option>
+          <option value="both">Both</option>
+        </select>
+      </div>
+
+      <button
+        onClick={() => setShowModal(true)}
+        {...styleComponent("BtnPrimary")}
+      >
         Open Modal
       </button>
 
@@ -48,22 +86,20 @@ export function ModalPage() {
           open={showModal}
           onOpenChange={setShowModal}
           heading="Modal Demo"
-          closeOnBackdropClick={closeOnBackdropClick}
+          closeOnOverlayClick={closeOnOverlayClick}
           closeOnEscape={closeOnEscape}
-          removeCloseButton={removeCloseButton}
+          showCloseButtons={showCloseButtons}
+          overlay={overlay}
+          style={{ Panel: { width: "400px", height: "300px" } }}
         >
           <p>Modal Text</p>
           <button
-            className={UI.BtnPrimary()}
-            onClick={() => addToastMessage("Success toast", "success")}
+            {...styleComponent("BtnPrimary")}
+            onClick={() => alert("Look at me!")}
           >
-            Success Toast
+            I'm Mr Meeseeks
           </button>
         </Modal>
-      </OptionalPortal>
-
-      <OptionalPortal portalTarget={document.body}>
-        <ToastMessageDisplay />
       </OptionalPortal>
     </div>
   );

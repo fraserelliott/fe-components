@@ -1,20 +1,50 @@
 import { NavLink } from "react-router-dom";
-import { UI } from "@styles";
+import { useFEStyles } from "@fraserelliott/fe-components";
+import { utilities, sx } from "@fraserelliott/fe-utilities";
+import { pages } from "../pages/HomePage";
 
-const pages = [
-  { name: "Home", to: "/" },
-  { name: "Toast", to: "/toast" },
-  { name: "Confirm Dialog", to: "/confirmdialog" },
-  { name: "Modal", to: "/modal" },
-];
+const style = {
+  inline: {
+    Navbar: sx(
+      utilities["fe-d-flex"],
+      utilities["fe-flex-row"],
+      utilities["fe-w-100"],
+      utilities["fe-justify-center"],
+      {
+        listStyle: "none",
+        backgroundColor: "var(--fec-bg-secondary, #ecece7)",
+      },
+    ),
+    NavItem: sx(
+      utilities["fe-d-flex"],
+      utilities["fe-items-center"],
+      utilities["fe-p-em-2"],
+    ),
+  },
+  anim: {
+    NavItem: "fec-btn",
+  },
+};
 
 export function Header() {
+  const { styleComponent } = useFEStyles(style);
+
   const renderPageLink = (page) => {
+    const navItemStyles = styleComponent("NavItem");
+
     return (
       <li key={page.name}>
         <NavLink
+          style={({ isActive }) =>
+            sx(
+              navItemStyles.style,
+              isActive && {
+                backgroundColor: "var(--fes-btn-primary, #64748b)",
+              },
+            )
+          }
           to={page.to}
-          className={({ isActive }) => UI.NavItem(isActive && "fec-bg-active")}
+          className={navItemStyles.className}
         >
           {page.name}
         </NavLink>
@@ -23,6 +53,8 @@ export function Header() {
   };
 
   return (
-    <ul className={UI.Navbar()}>{pages.map((page) => renderPageLink(page))}</ul>
+    <ul {...styleComponent("Navbar")}>
+      {pages.map((page) => renderPageLink(page))}
+    </ul>
   );
 }

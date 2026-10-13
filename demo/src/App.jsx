@@ -1,12 +1,12 @@
-import "./App.css";
-import "@fraserelliott/fe-components/stylesheet";
 import "@fraserelliott/fe-utilities/fe-utilities.css";
+import "@fraserelliott/fe-components/fe-components.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { HomePage } from "@pages/HomePage";
-import { ToastPage } from "@pages/ToastPage";
 import { ConfirmDialogPage } from "@pages/ConfirmDialogPage";
-import { ModalPage } from "@pages/ModalPage";
 import { Header } from "@components/Header";
+import { ModalPage } from "./pages/ModalPage";
+import { ToastPage } from "./pages/ToastPage";
+import { ActionTablePage } from "./pages/ActionTablePage";
 
 const basename = import.meta.env.PROD ? "/fe-components/" : "/";
 
@@ -17,9 +17,10 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/toast" element={<ToastPage />} />
           <Route path="/confirmdialog" element={<ConfirmDialogPage />} />
           <Route path="/modal" element={<ModalPage />} />
+          <Route path="/toast" element={<ToastPage />} />
+          <Route path="/actiontable" element={<ActionTablePage />} />
         </Routes>
       </BrowserRouter>
     </>
