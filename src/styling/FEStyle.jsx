@@ -6,8 +6,6 @@ const FEStyleContext = createContext({
 });
 
 export function FEStyleProvider({ theme = {}, children }) {
-  console.log("theme:", theme);
-
   return (
     <FEStyleContext.Provider value={{ theme }}>
       {children}

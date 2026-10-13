@@ -120,7 +120,7 @@ export const defaultStyles = {
       padding: "2rem",
       boxSizing: "border-box",
     },
-    Container: utilities["fe-d-flex"],
+    ToastContainer: sx(utilities["fe-d-flex"], utilities["fe-gap-2"]),
     Toast: toastBase,
     ToastSuccess: sx(toastBase, styles.BgConfirm),
     ToastError: sx(toastBase, styles.BgDanger),
