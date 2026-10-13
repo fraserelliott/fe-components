@@ -1,6 +1,6 @@
 import { defaultStyles } from "../styling/defaultStyle";
 import { useFEStyles } from "../styling/FEStyle";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useFocusManager } from "./FocusManager";
 import { sx, utilities } from "@fraserelliott/fe-utilities";
 
@@ -47,6 +47,7 @@ export function FloatingPanel({
   closeOnOverlayClick = false,
   onOpenChange,
   defaultStyle = {},
+  draggable = false,
 }) {
   const overrides = {
     inline: {
@@ -72,6 +73,7 @@ export function FloatingPanel({
       closeOnEscape={closeOnEscape}
       onOpenChange={onOpenChange}
       defaultStyle={defaultStyle}
+      draggable={draggable}
     >
       {children}
     </FloatingPanelInner>
@@ -101,6 +103,7 @@ function FloatingPanelInner({
   closeOnEscape,
   onOpenChange,
   defaultStyle,
+  draggable = false,
 }) {
   const { styleComponent } = useFEStyles(
     sx(defaultStyles, defaultStyle),
@@ -109,6 +112,8 @@ function FloatingPanelInner({
   );
   const { trapComponent, untrapComponent, isTopmost } = useFocusManager();
   const panelRef = useRef(null);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const dragRef = useRef(null);
 
   useEffect(() => {
     if (!open || !closeOnEscape || !trapFocus) return;
@@ -137,11 +142,58 @@ function FloatingPanelInner({
     return () => untrapComponent(element);
   }, [open, trapFocus, trapComponent, untrapComponent]);
 
+  const handlePointerDown = (e) => {
+    if (!draggable || e.button !== 0) return;
+
+    // Only drag from the exposed Panel surface,
+    // not its child content.
+    if (e.target !== e.currentTarget) return;
+
+    dragRef.current = {
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      startY: e.clientY,
+      offsetX: dragOffset.x,
+      offsetY: dragOffset.y,
+    };
+
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e) => {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== e.pointerId) return;
+
+    setDragOffset({
+      x: drag.offsetX + e.clientX - drag.startX,
+      y: drag.offsetY + e.clientY - drag.startY,
+    });
+  };
+
+  const handlePointerUp = (e) => {
+    if (dragRef.current?.pointerId !== e.pointerId) return;
+
+    dragRef.current = null;
+
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+  };
+
   return (
     <div
       ref={panelRef}
       tabIndex={trapFocus ? -1 : undefined}
-      {...styleComponent("Panel")}
+      {...styleComponent("Panel", {
+        ...(draggable && {
+          translate: `${dragOffset.x}px ${dragOffset.y}px`,
+          touchAction: "none",
+        }),
+      })}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
     >
       {children}
     </div>

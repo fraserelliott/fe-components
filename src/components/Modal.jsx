@@ -40,6 +40,7 @@ export function Modal({
   onOpenChange,
   showCloseButtons = "both",
   disableCloseButtons = false,
+  draggable = false,
   children,
 }) {
   const { styleComponent } = useFEStyles(
@@ -56,10 +57,12 @@ export function Modal({
     transform: "translate(-50%, -50%)",
   };
 
+  const modalZIndex = "var(--fec-z-modal, 100)";
+
   const overrides = {
     inline: {
-      Overlay: { zIndex: "var(--fec-z-modal, 100)" },
-      BlurOverlay: { zIndex: "var(--fec-z-modal, 100)" },
+      Overlay: { zIndex: modalZIndex },
+      BlurOverlay: { zIndex: modalZIndex },
       Panel: sx(
         utilities["fe-p-2"],
         {
@@ -67,6 +70,7 @@ export function Modal({
           height: "var(--fec-modal-h, clamp(240px, 80vh, 864px))",
           maxWidth: "90vw",
           maxHeight: "90vh",
+          zIndex: modalZIndex,
         },
         !overlay && noOverlayPosition,
       ),
@@ -89,6 +93,7 @@ export function Modal({
       onOpenChange={onOpenChange}
       closeOnEscape={closeOnEscape}
       closeOnOverlayClick={closeOnOverlayClick}
+      draggable={draggable}
     >
       <div
         style={sx(

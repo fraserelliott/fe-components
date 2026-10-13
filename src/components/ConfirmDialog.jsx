@@ -49,6 +49,7 @@ export function ConfirmDialog({
   onOpenChange,
   closeOnEscape,
   closeOnOverlayClick,
+  draggable = false,
 }) {
   const { styleComponent } = useFEStyles(
     defaultStyles,
@@ -90,11 +91,17 @@ export function ConfirmDialog({
     transform: "translate(-50%, -50%)",
   };
 
+  const dialogZIndex = "var(--fec-z-dialog, 200)";
+
   const overrides = {
     inline: {
-      Overlay: { zIndex: "var(--fec-z-dialog, 200)" },
-      BlurOverlay: { zIndex: "var(--fec-z-dialog, 200)" },
-      Panel: sx(utilities["fe-gap-3"], !overlay && noOverlayPosition),
+      Overlay: { zIndex: dialogZIndex },
+      BlurOverlay: { zIndex: dialogZIndex },
+      Panel: sx(
+        utilities["fe-gap-3"],
+        { zIndex: dialogZIndex },
+        !overlay && noOverlayPosition,
+      ),
     },
   };
 
@@ -109,6 +116,7 @@ export function ConfirmDialog({
       onOpenChange={() => handleCancel()}
       closeOnEscape={closeOnEscape}
       closeOnOverlayClick={closeOnOverlayClick}
+      draggable={draggable}
     >
       {heading && (
         <h1 {...styleComponent("Heading", utilities["fe-text-center"])}>

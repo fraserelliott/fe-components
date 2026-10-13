@@ -3,6 +3,7 @@ import {
   OptionalPortal,
   useFEStyles,
   defaultStyles,
+  ConfirmDialog,
 } from "@fraserelliott/fe-components";
 import { useState } from "react";
 import { utilities, sx } from "@fraserelliott/fe-utilities";
@@ -11,12 +12,23 @@ export function ModalPage() {
   const [showModal, setShowModal] = useState(false);
   const [closeOnEscape, setCloseOnEscape] = useState(true);
   const [showCloseButtons, setShowCloseButtons] = useState(false);
-  const [closeOnOverlayClick, setCloseOnOverlayClick] = useState(true);
+  const [closeOnOverlayClick, setCloseOnOverlayClick] = useState(false);
   const [overlay, setOverlay] = useState("blur");
+  const [draggable, setDraggable] = useState(true);
   const { styleComponent } = useFEStyles(defaultStyles);
+  const [showDialog, setShowDialog] = useState(false);
 
   return (
     <div {...styleComponent("Panel", utilities["fe-gap-2"])}>
+      <div style={sx(utilities["fe-d-flex"], utilities["fe-justify-center"])}>
+        <label>Draggable</label>
+        <input
+          type="checkbox"
+          onChange={(e) => setDraggable(e.target.checked)}
+          checked={draggable}
+        />
+      </div>
+
       <div style={sx(utilities["fe-d-flex"], utilities["fe-justify-center"])}>
         <label>Close on escape</label>
         <input
@@ -27,7 +39,7 @@ export function ModalPage() {
       </div>
 
       <div className="fe-d-flex fe-justify-center">
-        <label>Close on backdrop click</label>
+        <label>Close on overlay click</label>
         <input
           type="checkbox"
           onChange={(e) => setCloseOnOverlayClick(e.target.checked)}
@@ -91,6 +103,7 @@ export function ModalPage() {
           showCloseButtons={showCloseButtons}
           overlay={overlay}
           style={{ Panel: { width: "400px", height: "300px" } }}
+          draggable={draggable}
         >
           <p>Modal Text</p>
           <button
@@ -99,7 +112,30 @@ export function ModalPage() {
           >
             I'm Mr Meeseeks
           </button>
+
+          <button
+            {...styleComponent("BtnPrimary")}
+            onClick={() => setShowDialog(true)}
+          >
+            Open confirm dialog
+          </button>
         </Modal>
+      </OptionalPortal>
+
+      <OptionalPortal portalTarget={document.body}>
+        <ConfirmDialog
+          open={showDialog}
+          onOpenChange={setShowDialog}
+          onConfirm={() => setShowDialog(false)}
+          onCancel={() => setShowDialog(false)}
+          heading="Nested Confirm Dialog Demo"
+          text="Select option."
+          cancelLabel="NO!"
+          confirmLabel="Okay then"
+          closeOnEscape
+          overlay={false}
+          draggable
+        />
       </OptionalPortal>
     </div>
   );
