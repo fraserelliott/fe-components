@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>fe-components demo</title>
+    <script type="module" crossorigin src="./assets/index-D83j8TEf.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-cAp9dKyd.css">
+  </head>
+  <body>
+    <script>
+      (function () {
+        const repo = "/fe-components";
+        const params = new URLSearchParams(location.search);
+        const p = params.get("p");
+        if (p) {
+          const q = params.get("q");
+          const h = params.get("h");
+
+          history.replaceState(
+            null,
+            "",
+            repo + p + (q ? "?" + q : "") + (h ? "#" + h : ""),
+          );
+        }
+      })();
+    </script>
+    <div id="root" class="fes-app"></div>
+  </body>
+</html>
