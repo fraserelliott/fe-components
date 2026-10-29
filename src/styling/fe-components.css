@@ -14,6 +14,10 @@
   background-color: var(--fec-bg-active, #cfd8e3);
 }
 
+.fec-toggle-btn-primary {
+  background-color: var(--fec-bg-active, #cfd8e3);
+}
+
 .fec-btn-confirm {
   background-color: var(--fec-confirm, #4caf50);
 }

@@ -1,12 +1,12 @@
 {
   "name": "@fraserelliott/fe-components",
   "description": "Reusable React components",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "type": "module",
   "main": "./dist/index.js",
   "exports": {
-  ".": "./dist/index.js",
-  "./fe-components.css": "./dist/fe-components.css"
+    ".": "./dist/index.js",
+    "./fe-components.css": "./dist/fe-components.css"
   },
   "files": [
     "dist"

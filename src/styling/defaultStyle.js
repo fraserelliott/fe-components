@@ -105,8 +105,8 @@ export const defaultStyles = {
     ),
     Btn: sx(FEPresetsInline.Btn),
     BtnPrimary: sx(FEPresetsInline.Btn),
-    BtnDanger: sx(FEPresetsInline.Btn, styles.BgDanger),
-    BtnConfirm: sx(FEPresetsInline.Btn, styles.BgConfirm),
+    BtnDanger: sx(FEPresetsInline.Btn),
+    BtnConfirm: sx(FEPresetsInline.Btn),
     Heading: sx(utilities["fe-fw-bold"]),
     BlurOverlay: sx(overlayBase, {
       backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -117,8 +117,8 @@ export const defaultStyles = {
     ModalInner: {
       width: "100%",
       margin: "0 auto",
-      padding: "2rem",
       boxSizing: "border-box",
+      height: "100%",
     },
     ToastContainer: sx(utilities["fe-d-flex"], utilities["fe-gap-2"]),
     Toast: toastBase,
@@ -134,6 +134,7 @@ export const defaultStyles = {
     anim: {
       Btn: "fec-btn fe-pressable",
       BtnPrimary: "fec-btn fec-btn-primary fe-pressable",
+      ToggleBtnPrimary: "fec-btn fec-toggle-btn-primary fe-pressable",
       BtnConfirm: "fec-btn fec-btn-confirm fe-pressable",
       BtnDanger: "fec-btn fec-btn-danger fe-pressable",
       Toast: "fec-opacity-ease-out",
@@ -143,6 +144,7 @@ export const defaultStyles = {
 
     noAnim: {
       BtnPrimary: styles.BtnPrimary,
+      ToggleBtnPrimary: styles.BgActive,
       BtnDanger: styles.BgDanger,
       BtnConfirm: styles.BgConfirm,
     },

@@ -50,6 +50,8 @@ export function ConfirmDialog({
   closeOnEscape,
   closeOnOverlayClick,
   draggable = false,
+  cancelBtnSlot = "BtnDanger",
+  confirmBtnSlot = "BtnConfirm",
 }) {
   const { styleComponent } = useFEStyles(
     defaultStyles,
@@ -134,14 +136,14 @@ export function ConfirmDialog({
         )}
       >
         <button
-          {...styleComponent("BtnDanger")}
+          {...styleComponent(cancelBtnSlot)}
           onClick={() => handleCancel()}
           disabled={pending}
         >
           {cancelLabel}
         </button>
         <button
-          {...styleComponent("BtnConfirm")}
+          {...styleComponent(confirmBtnSlot)}
           onClick={() => handleConfirm()}
           disabled={pending}
         >

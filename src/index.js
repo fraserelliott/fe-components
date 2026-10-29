@@ -8,3 +8,4 @@ export * from "./components/Modal";
 export * from "./components/Toast";
 export * from "./components/ActionTable";
 export * from "./components/APIContext";
+export * from "./components/ToggleButton";

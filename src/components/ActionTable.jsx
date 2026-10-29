@@ -35,11 +35,13 @@ export function ActionTable({
   className,
   separateActionColumns,
   showHeadersWhenEmpty,
+  styleRow,
 }) {
   const { styleComponent } = useFEStyles(defaultStyles, style, className);
 
   const renderActionButton = (action, item) => (
     <button
+      type="button"
       {...styleComponent(action.buttonStyleSlot ?? "BtnPrimary")}
       key={action.key}
       onClick={() => action.onAction?.(item)}
@@ -76,7 +78,10 @@ export function ActionTable({
       </thead>
       <tbody>
         {items.map((item) => (
-          <tr key={getKey(item)}>
+          <tr
+            key={getKey(item)}
+            style={typeof styleRow === "function" ? styleRow(item) : styleRow}
+          >
             {columns.map((column) => (
               <td
                 {...styleComponent("TableCell")}
