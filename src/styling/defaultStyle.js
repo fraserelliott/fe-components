@@ -128,6 +128,19 @@ export const defaultStyles = {
       borderCollapse: "collapse",
     }),
     TableCell: sx(styles.Border, utilities["fe-p-em-1"]),
+    FormFields: sx(
+      utilities["fe-d-flex"],
+      utilities["fe-flex-column"],
+      utilities["fe-gap-2"],
+    ),
+    FormLabel: sx(
+      utilities["fe-d-flex"],
+      utilities["fe-flex-column"],
+      utilities["fe-gap-1"],
+    ),
+    TextConfirm: styles.TextConfirm,
+    TextDanger: styles.TextDanger,
+    FormValidation: { minHeight: "1.25em" },
   },
 
   anim: {
