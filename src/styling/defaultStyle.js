@@ -21,6 +21,10 @@ const styles = {
     backgroundColor: "var(--fec-bg-panel, #ffffff)",
   },
 
+  BgDropdown: {
+    backgroundColor: "var(--fec-bg-dropdown, #f2f0e9)",
+  },
+
   TextPrimary: {
     color: "var(--fec-text-primary, #1f1f1f)",
   },
@@ -141,6 +145,23 @@ export const defaultStyles = {
     TextConfirm: styles.TextConfirm,
     TextDanger: styles.TextDanger,
     FormValidation: { minHeight: "1.25em" },
+    InputPrimary: sx(
+      styles.BgDropdown,
+      styles.TextPrimary,
+      styles.Border,
+      styles.ShadowSoft,
+      utilities["fe-rounded-0"],
+      utilities["fe-px-1"],
+      { resize: "none", appearance: "none" },
+    ),
+    Menu: sx(
+      styles.BgDropdown,
+      styles.TextPrimary,
+      styles.Border,
+      styles.ShadowSoft,
+      utilities["fe-rounded-0"],
+      utilities["fe-px-1"],
+    ),
   },
 
   anim: {
